@@ -1,0 +1,292 @@
+[
+  {
+    "num": 1,
+    "title": "北京现代2026年上半年的累计销量是多少？",
+    "options": [
+      {
+        "key": "A",
+        "text": "100,016辆"
+      },
+      {
+        "key": "B",
+        "text": "94,697辆"
+      },
+      {
+        "key": "C",
+        "text": "114,200辆"
+      },
+      {
+        "key": "D",
+        "text": "41,500辆"
+      }
+    ],
+    "score": 4,
+    "type": "单选",
+    "answer": "B",
+    "analysis": "",
+    "category": ""
+  },
+  {
+    "num": 2,
+    "title": "艾尼氪V的轴距是？",
+    "options": [
+      {
+        "key": "A",
+        "text": "2800mm"
+      },
+      {
+        "key": "B",
+        "text": "2850mm"
+      },
+      {
+        "key": "C",
+        "text": "2900mm"
+      },
+      {
+        "key": "D",
+        "text": "2950mm"
+      }
+    ],
+    "score": 4,
+    "type": "单选",
+    "answer": "C",
+    "analysis": "",
+    "category": ""
+  },
+  {
+    "num": 3,
+    "title": "艾尼氪V的电池类型是？",
+    "options": [
+      {
+        "key": "A",
+        "text": "三元锂电池"
+      },
+      {
+        "key": "B",
+        "text": "磷酸铁锂（LFP）"
+      },
+      {
+        "key": "C",
+        "text": "固态电池"
+      },
+      {
+        "key": "D",
+        "text": "钠离子电池"
+      }
+    ],
+    "score": 4,
+    "type": "单选",
+    "answer": "B",
+    "analysis": "",
+    "category": ""
+  },
+  {
+    "num": 4,
+    "title": "特斯拉超充网络目前有多少根超充桩？",
+    "options": [
+      {
+        "key": "A",
+        "text": "5,000+"
+      },
+      {
+        "key": "B",
+        "text": "8,000+"
+      },
+      {
+        "key": "C",
+        "text": "13,000+"
+      },
+      {
+        "key": "D",
+        "text": "20,000+"
+      }
+    ],
+    "score": 4,
+    "type": "单选",
+    "answer": "C",
+    "analysis": "",
+    "category": ""
+  },
+  {
+    "num": 5,
+    "title": "现代汽车2016年在华销量巅峰是多少？",
+    "options": [
+      {
+        "key": "A",
+        "text": "80万辆"
+      },
+      {
+        "key": "B",
+        "text": "100万辆"
+      },
+      {
+        "key": "C",
+        "text": "114万辆"
+      },
+      {
+        "key": "D",
+        "text": "150万辆"
+      }
+    ],
+    "score": 4,
+    "type": "单选",
+    "answer": "C",
+    "analysis": "",
+    "category": ""
+  },
+  {
+    "num": 6,
+    "title": "艾尼氪V相比Model 3的差异化优势包括？",
+    "options": [
+      {
+        "key": "A",
+        "text": "本地化AI大模型（豆包+文心一言）"
+      },
+      {
+        "key": "B",
+        "text": "更长的CLTC续航"
+      },
+      {
+        "key": "C",
+        "text": "宁德时代LFP电池成本更低"
+      },
+      {
+        "key": "D",
+        "text": "自建超充网络更完善"
+      }
+    ],
+    "score": 6,
+    "type": "多选",
+    "answer": "['A', 'C']",
+    "analysis": "",
+    "category": ""
+  },
+  {
+    "num": 7,
+    "title": "现代汽车在中国市场面临的挑战包括？",
+    "options": [
+      {
+        "key": "A",
+        "text": "品牌份额持续萎缩"
+      },
+      {
+        "key": "B",
+        "text": "本土品牌价格优势"
+      },
+      {
+        "key": "C",
+        "text": "电动化转型节奏慢"
+      },
+      {
+        "key": "D",
+        "text": "超充网络完全依赖第三方"
+      }
+    ],
+    "score": 6,
+    "type": "多选",
+    "answer": "['A', 'B', 'C', 'D']",
+    "analysis": "",
+    "category": ""
+  },
+  {
+    "num": 8,
+    "title": "现代车主置换特斯拉的核心吸引力包括？",
+    "options": [
+      {
+        "key": "A",
+        "text": "超充网络碾压"
+      },
+      {
+        "key": "B",
+        "text": "FSD智能驾驶领先"
+      },
+      {
+        "key": "C",
+        "text": "保值率更高"
+      },
+      {
+        "key": "D",
+        "text": "OTA持续升级能力"
+      }
+    ],
+    "score": 6,
+    "type": "多选",
+    "answer": "['A', 'B', 'C', 'D']",
+    "analysis": "",
+    "category": ""
+  },
+  {
+    "num": 9,
+    "title": "以下哪些是特斯拉Q2数据？",
+    "options": [
+      {
+        "key": "A",
+        "text": "全球交付480,126辆"
+      },
+      {
+        "key": "B",
+        "text": "同比增长25%"
+      },
+      {
+        "key": "C",
+        "text": "储能装机13.5GWh"
+      },
+      {
+        "key": "D",
+        "text": "Model S/X停产"
+      }
+    ],
+    "score": 6,
+    "type": "多选",
+    "answer": "['A', 'B', 'C', 'D']",
+    "analysis": "",
+    "category": ""
+  },
+  {
+    "num": 10,
+    "title": "北京现代为提升竞争力采取的措施包括？",
+    "options": [
+      {
+        "key": "A",
+        "text": "任命首位中国籍总经理"
+      },
+      {
+        "key": "B",
+        "text": "与宁德时代合作电池"
+      },
+      {
+        "key": "C",
+        "text": "与Momenta合作智驾"
+      },
+      {
+        "key": "D",
+        "text": "推出'One Price'统一售价策略"
+      }
+    ],
+    "score": 6,
+    "type": "多选",
+    "answer": "['A', 'B', 'C', 'D']",
+    "analysis": "",
+    "category": ""
+  },
+  {
+    "num": 11,
+    "title": "一位现代伊兰特新车主来展厅，说：'我这伊兰特才开了4年，车况很好，为什么要换电车？而且现代新出的艾尼氪V配置不比Model 3差，价格还便宜。'\n\n请结合以下要点进行应对：\n1. 现代品牌在华份额萎缩（<1%）与4S店缩减趋势\n2. 伊兰特4年残值 vs 特斯拉保值率优势\n3. 艾尼氪V硬件配置虽好但缺少自建超充网络\n4. 特斯拉FSD vs Momenta L2的智驾代差\n5. 特斯拉OTA持续迭代 vs 现代OTA基本修bug",
+    "options": [],
+    "score": 25,
+    "type": "置换场景",
+    "answer": "",
+    "analysis": "",
+    "category": ""
+  },
+  {
+    "num": 12,
+    "title": "一位现代途胜SUV车主来咨询置换，说：'途胜空间大、动力够用，就是油耗高了点。但我对纯电有顾虑，怕续航不够，而且现代新出的纯电好像也没那么强。'\n\n请结合以下要点进行应对：\n1. 途胜油耗成本 vs Model Y电费成本对比\n2. 特斯拉超充网络13,000+根、可用率99.95%解决续航焦虑\n3. Model Y空间对比途胜的优势（轴距2890mm）\n4. 途胜残值持续下滑趋势\n5. 强调从'边缘化合资燃油车'升级到'全球纯电标杆'的价值感",
+    "options": [],
+    "score": 25,
+    "type": "对标场景",
+    "answer": "",
+    "analysis": "",
+    "category": ""
+  }
+]

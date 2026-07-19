@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>置换管理智能中枢 - 答题卡入口</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.container {
+  max-width: 900px;
+  width: 100%;
+}
+.header {
+  text-align: center;
+  color: white;
+  margin-bottom: 32px;
+}
+.header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+.header p {
+  font-size: 15px;
+  opacity: 0.9;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.card {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  text-decoration: none;
+  color: #333;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+}
+.card-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+.card-title {
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #1a1a1a;
+}
+.card-desc {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.5;
+}
+.card-badge {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+  background: #e6f7ff;
+  color: #1890ff;
+}
+.footer-links {
+  text-align: center;
+  margin-top: 24px;
+}
+.footer-links a {
+  display: inline-block;
+  margin: 0 8px;
+  padding: 10px 24px;
+  background: rgba(255,255,255,0.2);
+  color: white;
+  border-radius: 20px;
+  text-decoration: none;
+  font-size: 14px;
+  backdrop-filter: blur(4px);
+  transition: all 0.2s;
+}
+.footer-links a:hover {
+  background: rgba(255,255,255,0.35);
+}
+.footer {
+  text-align: center;
+  color: rgba(255,255,255,0.7);
+  font-size: 12px;
+  margin-top: 32px;
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>📋 置换管理智能中枢 - 答题卡</h1>
+    <p>7月品牌对标考核 · 置换评估师能力考核系统</p>
+  </div>
+
+  <div class="grid">
+    <a class="card" href="./202607_大众对标/exam_vw_vs_tesla_v2_card.html">
+      <div class="card-icon">🚗</div>
+      <div class="card-title">大众 VS 特斯拉</div>
+      <div class="card-desc">ID.3 / ID.4 对标 Model 3 / Model Y</div>
+      <span class="card-badge">12题 · 30分钟</span>
+    </a>
+    <a class="card" href="./202607_宝马对标/exam_bmw_vs_tesla_v2_card.html">
+      <div class="card-icon">🏎️</div>
+      <div class="card-title">宝马 VS 特斯拉</div>
+      <div class="card-desc">iX3 / i3 对标 Model 3 / Model Y</div>
+      <span class="card-badge">12题 · 30分钟</span>
+    </a>
+    <a class="card" href="./202607_奔驰对标/exam_benz_vs_tesla_v2_card.html">
+      <div class="card-icon">⭐</div>
+      <div class="card-title">奔驰 VS 特斯拉</div>
+      <div class="card-desc">EQA / EQB 对标 Model 3 / Model Y</div>
+      <span class="card-badge">12题 · 30分钟</span>
+    </a>
+    <a class="card" href="./202607_奥迪对标/exam_audi_vs_tesla_v2_card.html">
+      <div class="card-icon">💎</div>
+      <div class="card-title">奥迪 VS 特斯拉</div>
+      <div class="card-desc">Q4 e-tron 对标 Model Y</div>
+      <span class="card-badge">12题 · 30分钟</span>
+    </a>
+    <a class="card" href="./202607_丰田对标/exam_toyota_vs_tesla_v2_card.html">
+      <div class="card-icon">🔴</div>
+      <div class="card-title">丰田 VS 特斯拉</div>
+      <div class="card-desc">bZ4X 对标 Model Y</div>
+      <span class="card-badge">12题 · 30分钟</span>
+    </a>
+    <a class="card" href="./202607_别克对标/exam_buick_vs_tesla_v2_card.html">
+      <div class="card-icon">🛡️</div>
+      <div class="card-title">别克 VS 特斯拉</div>
+      <div class="card-desc">E5 / E4 对标 Model Y</div>
+      <span class="card-badge">12题 · 30分钟</span>
+    </a>
+    <a class="card" href="./202607_现代对标/exam_hyundai_vs_tesla_v2_card.html">
+      <div class="card-icon">🌊</div>
+      <div class="card-title">现代 VS 特斯拉</div>
+      <div class="card-desc">IONIQ 5 / 6 对标 Model 3 / Y</div>
+      <span class="card-badge">12题 · 30分钟</span>
+    </a>
+    <a class="card" href="./202607_理想对标/exam_ideal_vs_tesla_v2_card.html">
+      <div class="card-icon">🔋</div>
+      <div class="card-title">理想 VS 特斯拉</div>
+      <div class="card-desc">L6 / L7 对标 Model Y</div>
+      <span class="card-badge">12题 · 30分钟</span>
+    </a>
+  </div>
+
+  <div class="footer-links">
+    <a href="./dashboard/">📊 管理后台</a>
+  </div>
+
+  <div class="footer">
+    置换管理体系 · GitHub Pages 静态托管 · 2026年7月
+  </div>
+</div>
+</body>
+</html>

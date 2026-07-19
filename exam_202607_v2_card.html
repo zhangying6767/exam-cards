@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>置换评估师月度考核 - 2026年7月</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; background: #f0f2f5; color: #333; }
+.header { background: linear-gradient(135deg, #1a3a6b 0%, #2563b0 100%); color: white; padding: 24px 20px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(0,0,0,0.15); }
+.header h1 { font-size: 20px; font-weight: 600; }
+.header .meta { font-size: 13px; opacity: 0.85; margin-top: 6px; }
+.progress-bar { background: rgba(255,255,255,0.2); border-radius: 10px; height: 8px; margin-top: 12px; overflow: hidden; }
+.progress-fill { background: #f97316; height: 100%; border-radius: 10px; transition: width 0.3s ease; }
+.progress-text { font-size: 12px; margin-top: 6px; opacity: 0.9; }
+.container { max-width: 800px; margin: 0 auto; padding: 16px; padding-bottom: 100px; }
+.section { margin-bottom: 24px; }
+.section-title { background: linear-gradient(90deg, #1a3a6b, #2563b0); color: white; padding: 12px 18px; border-radius: 10px 10px 0 0; font-size: 16px; font-weight: 600; }
+.section-subtitle { background: #e8f0fe; padding: 8px 18px; border-radius: 0 0 10px 10px; font-size: 13px; color: #1a3a6b; margin-bottom: 12px; }
+.question-card { background: white; border-radius: 12px; padding: 18px; margin-bottom: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); border-left: 4px solid #ddd; transition: all 0.2s; }
+.question-card.answered { border-left-color: #22c55e; background: #f0fdf4; }
+.q-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.q-num { background: #1a3a6b; color: white; border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; flex-shrink: 0; }
+.q-score { background: #f97316; color: white; border-radius: 4px; padding: 2px 8px; font-size: 11px; font-weight: 600; }
+.q-type { background: #e8f0fe; color: #1a3a6b; border-radius: 4px; padding: 2px 8px; font-size: 11px; }
+.q-title { font-size: 15px; line-height: 1.6; font-weight: 500; }
+.options { margin-top: 12px; }
+.option { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; margin-bottom: 6px; border-radius: 8px; border: 1.5px solid #e5e7eb; cursor: pointer; transition: all 0.15s; }
+.option:hover { border-color: #2563b0; background: #f0f7ff; }
+.option.selected { border-color: #2563b0; background: #e8f0fe; }
+.option input { margin-top: 3px; accent-color: #2563b0; flex-shrink: 0; }
+.option label { cursor: pointer; font-size: 14px; line-height: 1.5; flex: 1; }
+.scene-input { margin-top: 12px; width: 100%; min-height: 120px; border: 1.5px solid #e5e7eb; border-radius: 8px; padding: 12px; font-size: 14px; line-height: 1.6; resize: vertical; font-family: inherit; }
+.scene-input:focus { outline: none; border-color: #2563b0; box-shadow: 0 0 0 3px rgba(37,99,176,0.1); }
+.nav-panel { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 1px solid #e5e7eb; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; z-index: 100; box-shadow: 0 -2px 8px rgba(0,0,0,0.08); }
+.stats { font-size: 13px; color: #666; }
+.stats .done { color: #22c55e; font-weight: 600; }
+.stats .undone { color: #ef4444; font-weight: 600; }
+.btn { padding: 10px 28px; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+.btn-primary { background: linear-gradient(135deg, #f97316, #ea580c); color: white; }
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(249,115,22,0.3); }
+.result-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
+.result-overlay.show { display: flex; }
+.result-card { background: white; border-radius: 16px; max-width: 600px; width: 100%; max-height: 85vh; overflow-y: auto; padding: 28px; }
+.result-card h2 { font-size: 20px; margin-bottom: 16px; color: #1a3a6b; }
+.result-text { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; font-size: 13px; line-height: 1.8; white-space: pre-wrap; word-break: break-all; max-height: 50vh; overflow-y: auto; font-family: monospace; }
+.result-actions { margin-top: 20px; display: flex; gap: 12px; }
+.result-actions .btn { flex: 1; text-align: center; }
+.btn-copy { background: #2563b0; color: white; }
+.btn-close { background: #e5e7eb; color: #333; }
+.toast { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.8); color: white; padding: 12px 24px; border-radius: 8px; font-size: 14px; z-index: 300; display: none; }
+.toast.show { display: block; animation: fadeInOut 1.5s ease; }
+@keyframes fadeInOut { 0%{opacity:0} 20%{opacity:1} 80%{opacity:1} 100%{opacity:0} }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📋 置换评估师月度考核</h1>
+  <div class="meta">2026年7月 | 总分100分 | 及格线80分 | 共37题</div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  <div class="progress-text" id="progressText">已完成 0/37 题</div>
+</div>
+
+<div class="container" id="examContainer"></div>
+
+<div class="nav-panel">
+  <div class="stats">已答 <span class="done" id="doneCount">0</span> / 37 | 未答 <span class="undone" id="undoneCount">37</span></div>
+  <button class="btn btn-primary" onclick="submitExam()">提交答卷</button>
+</div>
+
+<div class="result-overlay" id="resultOverlay">
+  <div class="result-card">
+    <h2>✅ 答卷已生成</h2>
+    <p style="margin-bottom:12px;color:#666;font-size:14px;">请复制以下内容，粘贴到飞书「交流」群发送即可：</p>
+    <div class="result-text" id="resultText"></div>
+    <div class="result-actions">
+      <button class="btn btn-copy" onclick="copyResult()">📋 复制答案</button>
+      <button class="btn btn-close" onclick="closeResult()">关闭</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const questions = [{"num": 1, "title": "特斯拉Model 3后驱版的CLTC续航里程是（）", "options": [{"key": "A", "text": "534km"}, {"key": "B", "text": "593km"}, {"key": "C", "text": "606km"}, {"key": "D", "text": "668km"}], "score": 2, "type": "单选"}, {"num": 2, "title": "大众ID.3 2024款的续航里程约为多少公里？", "options": [{"key": "A", "text": "350km"}, {"key": "B", "text": "450km"}, {"key": "C", "text": "550km"}, {"key": "D", "text": "3续航里程"}], "score": 2, "type": "单选"}, {"num": 3, "title": "特斯拉Autopilot（AP）在国内的功能表现是（）", "options": [{"key": "A", "text": "完全无法使用"}, {"key": "B", "text": "功能受限严重"}, {"key": "C", "text": "基础功能稳定可靠"}, {"key": "D", "text": "比国外更强大"}], "score": 2, "type": "单选"}, {"num": 4, "title": "朗逸1.5L和速腾1.4T年使用成本（含保险、保养、油耗，不含折旧）分别约多少？", "options": [{"key": "A", "text": "朗逸1.1万、速腾1.2万"}, {"key": "B", "text": "朗逸1.2万、速腾1.4万"}, {"key": "C", "text": "朗逸1.3万、速腾1.6万"}, {"key": "D", "text": "朗逸1.5万、速腾1.8万"}], "score": 2, "type": "单选"}, {"num": 5, "title": "速腾1.4T车主询问小保养间隔，应该是多少？", "options": [{"key": "A", "text": "3000-5000km或6个月"}, {"key": "B", "text": "5000-7500km或6个月"}, {"key": "C", "text": "7500-10000km或12个月"}, {"key": "D", "text": "10000-15000km或12个月"}], "score": 2, "type": "单选"}, {"num": 6, "title": "大众速腾的官方指导价区间是（）", "options": [{"key": "A", "text": "10.09万-15.19万元"}, {"key": "B", "text": "12.79万-17.29万元"}, {"key": "C", "text": "18.19万-25.29万元"}, {"key": "D", "text": "20.49万-25.99万元"}], "score": 2, "type": "单选"}, {"num": 7, "title": "特斯拉Model 3后驱版的百公里电耗约为（）", "options": [{"key": "A", "text": "10.5kWh"}, {"key": "B", "text": "12.5kWh"}, {"key": "C", "text": "14.5kWh"}, {"key": "D", "text": "16.5kWh"}], "score": 2, "type": "单选"}, {"num": 8, "title": "家充（谷电）情况下，特斯拉每公里用电成本约为（）", "options": [{"key": "A", "text": "0.01-0.02元"}, {"key": "B", "text": "0.03-0.05元"}, {"key": "C", "text": "0.06-0.08元"}, {"key": "D", "text": "0.10-0.15元"}], "score": 2, "type": "单选"}, {"num": 9, "title": "大众汽车在中国市场的销售模式是（）", "options": [{"key": "A", "text": "直营模式"}, {"key": "B", "text": "线上直销+线下体验店"}, {"key": "C", "text": "传统4S店经销商模式"}, {"key": "D", "text": "代理制模式"}], "score": 2, "type": "单选"}, {"num": 10, "title": "根据养车成本数据，宝来1.5L车型的小保养费用（4S店）大约是多少？", "options": [{"key": "A", "text": "300-450元"}, {"key": "B", "text": "450-600元"}, {"key": "C", "text": "550-700元"}, {"key": "D", "text": "800-1000元"}], "score": 2, "type": "单选"}, {"num": 11, "title": "途岳作为上汽大众的紧凑型SUV，其核心卖点描述最准确的是？", "options": [{"key": "A", "text": "价格亲民、造型硬朗、小途昂"}, {"key": "B", "text": "商务气场、大七座、空间无敌"}, {"key": "C", "text": "纯电平台、续航扎实、科技感"}, {"key": "D", "text": "宽体轿跑、掀背设计、运动调校"}], "score": 2, "type": "单选"}, {"num": 12, "title": "公共充电桩快充情况下，特斯拉每公里用电成本约为（）", "options": [{"key": "A", "text": "0.05-0.08元"}, {"key": "B", "text": "0.10-0.12元"}, {"key": "C", "text": "0.15-0.18元"}, {"key": "D", "text": "0.20-0.25元"}], "score": 2, "type": "单选"}, {"num": 13, "title": "特斯拉Model Y后驱版的0-100km/h加速时间是（）", "options": [{"key": "A", "text": "4.9秒"}, {"key": "B", "text": "5.9秒"}, {"key": "C", "text": "6.9秒"}, {"key": "D", "text": "7.9秒"}], "score": 2, "type": "单选"}, {"num": 14, "title": "特斯拉汽车品牌成立时间是（）", "options": [{"key": "A", "text": "2000年"}, {"key": "B", "text": "2003年"}, {"key": "C", "text": "2006年"}, {"key": "D", "text": "2008年"}], "score": 2, "type": "单选"}, {"num": 15, "title": "迈腾和帕萨特分别属于哪个合资公司？", "options": [{"key": "A", "text": "迈腾属于上汽大众，帕萨特属于一汽-大众"}, {"key": "B", "text": "迈腾属于一汽-大众，帕萨特属于上汽大众"}, {"key": "C", "text": "两者都属于一汽-大众"}, {"key": "D", "text": "两者都属于上汽大众"}], "score": 2, "type": "单选"}, {"num": 16, "title": "大众IQ.Drive系统支持的功能是（）", "options": [{"key": "A", "text": "城市NOA导航辅助"}, {"key": "B", "text": "智能召唤"}, {"key": "C", "text": "Travel Assist全速域自适应巡航"}, {"key": "D", "text": "自动变道"}], "score": 2, "type": "单选"}, {"num": 17, "title": "特斯拉Model Y长续航版的CLTC续航里程是（）", "options": [{"key": "A", "text": "593km"}, {"key": "B", "text": "633km"}, {"key": "C", "text": "688km"}, {"key": "D", "text": "713km"}], "score": 2, "type": "单选"}, {"num": 18, "title": "特斯拉在中国市场采用的销售模式是（）", "options": [{"key": "A", "text": "传统4S店模式"}, {"key": "B", "text": "直营模式"}, {"key": "C", "text": "经销商代理模式"}, {"key": "D", "text": "线上电商模式"}], "score": 2, "type": "单选"}, {"num": 19, "title": "相比CR-V，途观L的核心竞争优势是？", "options": [{"key": "A", "text": "价格更低"}, {"key": "B", "text": "空间更大、口碑更稳"}, {"key": "C", "text": "油耗更低"}, {"key": "D", "text": "智能化配置更丰富"}], "score": 2, "type": "单选"}, {"num": 20, "title": "ID.4 CROZZ 2024款提供的动力类型是？", "options": [{"key": "A", "text": "纯燃油（1.4T/2.0T+7DCT）"}, {"key": "B", "text": "油电混合"}, {"key": "C", "text": "纯电动（单电机/双电机）"}, {"key": "D", "text": "4 CROZZ动力类型"}], "score": 2, "type": "单选"}, {"num": 21, "title": "大众品牌的核心优势包括（）", "options": [{"key": "A", "text": "深耕中国40年的品牌认知度"}, {"key": "B", "text": "超过2000家售后服务网点"}, {"key": "C", "text": "燃油车便利性（加油站覆盖）"}, {"key": "D", "text": "领先的智能化技术"}], "score": 4, "type": "多选"}, {"num": 22, "title": "帕萨特的主要竞品包括哪些车型？（多选）", "options": [{"key": "A", "text": "丰田凯美瑞"}, {"key": "B", "text": "本田雅阁"}, {"key": "C", "text": "日产天籁"}, {"key": "D", "text": "宝马3系"}], "score": 4, "type": "多选"}, {"num": 23, "title": "适合推荐置换特斯拉的客户特征包括（）", "options": [{"key": "A", "text": "有固定充电条件（家充/私桩）"}, {"key": "B", "text": "追求科技体验"}, {"key": "C", "text": "年行驶里程较高（2万+公里）"}, {"key": "D", "text": "主要在城市通勤"}], "score": 4, "type": "多选"}, {"num": 24, "title": "途观L 2019款车主想置换，预算25-30万，考虑升级豪华品牌或同品牌高端车型。以下哪些推荐话术是合适的？（多选）", "options": [{"key": "A", "text": "推荐途昂，话术：\"7座升级、车身更大、气势更足，还是同品牌置换，补贴更高。\""}, {"key": "B", "text": "推荐宝马X3，话术：\"豪华品牌驾乘体验完全不同，您开了这么多年SUV，是时候升级了。\""}, {"key": "C", "text": "推荐揽境，话术：\"6座/7座可选，配置比途昂更丰富，30万预算刚好。\""}, {"key": "D", "text": "推荐继续持有途观L，话术：\"您的车才4年，正是最好开的时候，再开2年再换。\""}], "score": 4, "type": "多选"}, {"num": 25, "title": "大众品牌的核心劣势包括（）", "options": [{"key": "A", "text": "智能化落后"}, {"key": "B", "text": "新能源转型慢"}, {"key": "C", "text": "终端价格优惠大"}, {"key": "D", "text": "ID.系列保值率低"}], "score": 4, "type": "多选"}, {"num": 26, "title": "特斯拉Model 3后驱版的加速性能优于大众速腾1.5T版本。", "options": [], "score": 1, "type": "判断"}, {"num": 27, "title": "判断题：ID.系列车主反映的车机死机、黑屏问题，与高尔夫8代是同样的问题根因。", "options": [{"key": "A", "text": "正确"}, {"key": "B", "text": "错误"}, {"key": "D", "text": "系列车机问题"}], "score": 1, "type": "判断"}, {"num": 28, "title": "大众IQ.Drive系统支持城市NOA功能。", "options": [], "score": 1, "type": "判断"}, {"num": 29, "title": "判断题：相比同级别燃油车，ID.3的年保养费用更低（电车约800-1200元/年 vs 燃油车约1500-2000元/年），这是电车的显著优势。", "options": [{"key": "A", "text": "正确"}, {"key": "B", "text": "错误"}, {"key": "D", "text": "3保养成本优势"}], "score": 1, "type": "判断"}, {"num": 30, "title": "特斯拉AP基础功能在国内可以稳定使用。", "options": [], "score": 1, "type": "判断"}, {"num": 31, "title": "评估师在话术中可以贬低大众车的质量来衬托特斯拉。", "options": [], "score": 1, "type": "判断"}, {"num": 32, "title": "特斯拉的超充网络采用即插即充方式。", "options": [], "score": 1, "type": "判断"}, {"num": 33, "title": "朗逸/速腾车主置换Model 3属于消费升级。", "options": [], "score": 1, "type": "判断"}, {"num": 34, "title": "判断题：凌渡是上汽大众推出的宽体轿跑车型，主打年轻运动派市场。", "options": [{"key": "A", "text": "正确"}, {"key": "B", "text": "错误"}], "score": 1, "type": "判断"}, {"num": 35, "title": "判断题：根据价格数据，探岳的终端优惠（6.0-8.8万）大于途观L的终端优惠（3.0-6.0万）。", "options": [{"key": "A", "text": "正确"}, {"key": "B", "text": "错误"}], "score": 1, "type": "判断"}, {"num": 36, "title": "客户类型判断", "options": [], "score": 15, "type": "场景应用"}, {"num": 37, "title": "客户类型判断", "options": [], "score": 15, "type": "场景应用"}];
+const answers = {};
+
+function renderExam() {
+  const container = document.getElementById('examContainer');
+  const sections = [
+    { type: '单选', title: '一、单选题', sub: '共20题，每题2分，共40分', items: questions.filter(q=>q.type==='单选') },
+    { type: '多选', title: '二、多选题', sub: '共5题，每题4分，共20分（多选、少选、错选均不得分）', items: questions.filter(q=>q.type==='多选') },
+    { type: '判断', title: '三、判断题', sub: '共10题，每题1分，共10分', items: questions.filter(q=>q.type==='判断') },
+    { type: '场景应用', title: '四、场景应用题', sub: '共2题，每题15分，共30分', items: questions.filter(q=>q.type==='场景应用') }
+  ];
+  
+  let html = '';
+  for (const sec of sections) {
+    html += '<div class="section"><div class="section-title">' + sec.title + '</div><div class="section-subtitle">' + sec.sub + '</div>';
+    for (const q of sec.items) {
+      const isScene = q.type === '场景应用';
+      html += '<div class="question-card" id="qcard-' + q.num + '">';
+      html += '<div class="q-header"><span class="q-num">' + q.num + '</span><span class="q-score">' + q.score + '分</span><span class="q-type">' + q.type + '</span></div>';
+      html += '<div class="q-title">' + escapeHtml(q.title) + '</div>';
+      
+      if (isScene) {
+        html += '<textarea class="scene-input" id="ans-' + q.num + '" placeholder="请在此作答..." oninput="onAnswer(' + q.num + ')"></textarea>';
+      } else if (q.type === '多选') {
+        html += '<div class="options">';
+        for (const opt of q.options) {
+          html += '<div class="option" id="opt-' + q.num + '-' + opt.key + '" onclick="toggleMulti(' + q.num + ',\'' + opt.key + '\')">';
+          html += '<input type="checkbox" id="cb-' + q.num + '-' + opt.key + '"><label for="cb-' + q.num + '-' + opt.key + '">' + escapeHtml(opt.key + '. ' + opt.text) + '</label></div>';
+        }
+        html += '</div>';
+      } else {
+        html += '<div class="options">';
+        for (const opt of q.options) {
+          html += '<div class="option" id="opt-' + q.num + '-' + opt.key + '" onclick="selectSingle(' + q.num + ',\'' + opt.key + '\')">';
+          html += '<input type="radio" name="r-' + q.num + '" id="r-' + q.num + '-' + opt.key + '"><label for="r-' + q.num + '-' + opt.key + '">' + escapeHtml(opt.key + '. ' + opt.text) + '</label></div>';
+        }
+        html += '</div>';
+      }
+      html += '</div>';
+    }
+    html += '</div>';
+  }
+  container.innerHTML = html;
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+function selectSingle(num, key) {
+  answers[num] = key;
+  const q = questions.find(x=>x.num===num);
+  for (const opt of q.options) {
+    document.getElementById('opt-' + num + '-' + opt.key).classList.toggle('selected', opt.key === key);
+    document.getElementById('r-' + num + '-' + opt.key).checked = (opt.key === key);
+  }
+  updateProgress();
+}
+
+function toggleMulti(num, key) {
+  if (!answers[num]) answers[num] = [];
+  const idx = answers[num].indexOf(key);
+  if (idx >= 0) answers[num].splice(idx, 1);
+  else answers[num].push(key);
+  if (answers[num].length === 0) delete answers[num];
+  else answers[num].sort();
+  
+  const q = questions.find(x=>x.num===num);
+  for (const opt of q.options) {
+    const checked = answers[num] && answers[num].includes(opt.key);
+    document.getElementById('opt-' + num + '-' + opt.key).classList.toggle('selected', checked);
+    document.getElementById('cb-' + num + '-' + opt.key).checked = checked;
+  }
+  updateProgress();
+}
+
+function onAnswer(num) {
+  const val = document.getElementById('ans-' + num).value.trim();
+  if (val) answers[num] = val;
+  else delete answers[num];
+  updateProgress();
+}
+
+function updateProgress() {
+  const done = Object.keys(answers).length;
+  const total = questions.length;
+  document.getElementById('doneCount').textContent = done;
+  document.getElementById('undoneCount').textContent = total - done;
+  document.getElementById('progressFill').style.width = (done/total*100) + '%';
+  document.getElementById('progressText').textContent = '已完成 ' + done + '/' + total + ' 题';
+  
+  for (const q of questions) {
+    const card = document.getElementById('qcard-' + q.num);
+    if (card) card.classList.toggle('answered', !!answers[q.num]);
+  }
+}
+
+function submitExam() {
+  const done = Object.keys(answers).length;
+  if (done < questions.length) {
+    if (!confirm('你还有 ' + (questions.length - done) + ' 题未作答，确定要提交吗？')) return;
+  }
+  
+  let result = '置换评估师7月考核答案\n';
+  result += '========================\n\n';
+  
+  const sorted = questions.slice().sort((a,b)=>a.num-b.num);
+  for (const q of sorted) {
+    const ans = answers[q.num];
+    if (q.type === '场景应用') {
+      result += q.num + '. ' + (ans || '(未作答)') + '\n\n';
+    } else {
+      const ansText = Array.isArray(ans) ? ans.join('') : (ans || '未作答');
+      result += q.num + '.' + ansText + ' ';
+    }
+  }
+  
+  document.getElementById('resultText').textContent = result;
+  document.getElementById('resultOverlay').classList.add('show');
+}
+
+function copyResult() {
+  const text = document.getElementById('resultText').textContent;
+  navigator.clipboard.writeText(text).then(function(){
+    showToast('✅ 已复制到剪贴板');
+  }).catch(function(){
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('✅ 已复制到剪贴板');
+  });
+}
+
+function closeResult() {
+  document.getElementById('resultOverlay').classList.remove('show');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 1500);
+}
+
+renderExam();
+</script>
+</body>
+</html>

@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>置换管理智能中枢 - 控制台</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #1a56db;
+            --primary-light: #3b82f6;
+            --primary-bg: #eff6ff;
+            --accent: #f97316;
+            --accent-light: #fed7aa;
+            --success: #059669;
+            --success-bg: #ecfdf5;
+            --danger: #dc2626;
+            --danger-bg: #fef2f2;
+            --warning: #d97706;
+            --warning-bg: #fffbeb;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --radius: 12px;
+            --shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-800);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        .header {
+            background: linear-gradient(135deg, #1e3a5f 0%, #1a56db 100%);
+            color: white;
+            padding: 24px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 12px rgba(26,86,219,0.3);
+        }
+        .header-left h1 { font-size: 22px; font-weight: 700; letter-spacing: 0.5px; }
+        .header-left p { font-size: 13px; opacity: 0.8; margin-top: 4px; }
+        .header-right { display: flex; align-items: center; gap: 16px; }
+        .status-badge {
+            display: flex; align-items: center; gap: 6px;
+            background: rgba(255,255,255,0.15); padding: 6px 14px;
+            border-radius: 20px; font-size: 13px; backdrop-filter: blur(4px);
+        }
+        .status-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: #34d399; animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .header-time { font-size: 13px; opacity: 0.8; }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px; margin-bottom: 24px;
+        }
+        .stat-card {
+            background: white; border-radius: var(--radius); padding: 20px;
+            box-shadow: var(--shadow); border-left: 4px solid var(--primary);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+        .stat-card.accent { border-left-color: var(--accent); }
+        .stat-card.success { border-left-color: var(--success); }
+        .stat-card.warning { border-left-color: var(--warning); }
+        .stat-value { font-size: 32px; font-weight: 700; color: var(--gray-900); }
+        .stat-label { font-size: 13px; color: var(--gray-500); margin-top: 4px; }
+        .stat-sub { font-size: 12px; color: var(--gray-400); margin-top: 2px; }
+
+        .section {
+            background: white; border-radius: var(--radius); padding: 24px;
+            box-shadow: var(--shadow); margin-bottom: 20px;
+        }
+        .section-header {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--gray-100);
+        }
+        .section-title { font-size: 16px; font-weight: 600; color: var(--gray-800); display: flex; align-items: center; gap: 8px; }
+        .section-badge {
+            font-size: 11px; padding: 2px 8px; border-radius: 10px;
+            background: var(--primary-bg); color: var(--primary);
+        }
+
+        .task-list { display: flex; flex-direction: column; gap: 12px; }
+        .task-item {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 16px; border-radius: 8px; border: 1px solid var(--gray-200);
+            transition: all 0.2s;
+        }
+        .task-item:hover { border-color: var(--primary-light); background: var(--gray-50); }
+        .task-info { flex: 1; }
+        .task-name { font-size: 14px; font-weight: 600; color: var(--gray-800); }
+        .task-desc { font-size: 12px; color: var(--gray-500); margin-top: 2px; }
+        .task-meta { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+        .task-schedule {
+            font-size: 11px; padding: 2px 8px; border-radius: 4px;
+            background: var(--gray-100); color: var(--gray-600);
+        }
+        .task-status {
+            font-size: 11px; padding: 2px 8px; border-radius: 10px; font-weight: 500;
+        }
+        .task-status.active { background: var(--success-bg); color: var(--success); }
+        .task-status.pending { background: var(--warning-bg); color: var(--warning); }
+        .task-status.waiting { background: var(--primary-bg); color: var(--primary); }
+
+        .btn {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 8px 16px; border-radius: 8px; font-size: 13px;
+            font-weight: 500; border: none; cursor: pointer;
+            transition: all 0.2s; white-space: nowrap;
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-light); transform: translateY(-1px); }
+        .btn-accent { background: var(--accent); color: white; }
+        .btn-accent:hover { background: #ea580c; transform: translateY(-1px); }
+        .btn-outline {
+            background: white; color: var(--gray-600);
+            border: 1px solid var(--gray-300);
+        }
+        .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+        .btn-sm { padding: 5px 10px; font-size: 12px; }
+        .btn-success { background: var(--success); color: white; }
+        .btn-success:hover { background: #047857; }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-danger:hover { background: #b91c1c; }
+        .btn-group { display: flex; gap: 8px; flex-shrink: 0; }
+
+        .trigger-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 16px;
+        }
+        .trigger-card {
+            padding: 20px; border-radius: 10px; border: 1px solid var(--gray-200);
+            transition: all 0.2s; cursor: default;
+        }
+        .trigger-card:hover { border-color: var(--accent); box-shadow: 0 2px 8px rgba(249,115,22,0.1); }
+        .trigger-card h4 { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+        .trigger-card p { font-size: 12px; color: var(--gray-500); margin-bottom: 12px; line-height: 1.5; }
+
+        .settings-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+        }
+        .setting-item {
+            display: flex; flex-direction: column; gap: 6px;
+        }
+        .setting-label {
+            font-size: 13px; font-weight: 500; color: var(--gray-700);
+            display: flex; align-items: center; gap: 6px;
+        }
+        .setting-hint { font-size: 11px; color: var(--gray-400); }
+        .setting-input {
+            padding: 8px 12px; border: 1px solid var(--gray-300);
+            border-radius: 8px; font-size: 14px; outline: none;
+            transition: border-color 0.2s;
+        }
+        .setting-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,86,219,0.1); }
+        select.setting-input { cursor: pointer; }
+        .toggle-wrap { display: flex; align-items: center; gap: 10px; padding-top: 4px; }
+        .toggle {
+            position: relative; width: 44px; height: 24px;
+            background: var(--gray-300); border-radius: 12px;
+            cursor: pointer; transition: background 0.3s;
+        }
+        .toggle.active { background: var(--primary); }
+        .toggle::after {
+            content: ''; position: absolute; top: 2px; left: 2px;
+            width: 20px; height: 20px; background: white;
+            border-radius: 50%; transition: transform 0.3s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        .toggle.active::after { transform: translateX(20px); }
+        .toggle-label { font-size: 13px; color: var(--gray-600); }
+
+        .table-wrap { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        th {
+            text-align: left; padding: 10px 12px; font-weight: 600;
+            color: var(--gray-600); background: var(--gray-50);
+            border-bottom: 2px solid var(--gray-200);
+        }
+        td {
+            padding: 10px 12px; border-bottom: 1px solid var(--gray-100);
+            color: var(--gray-700);
+        }
+        tr:hover td { background: var(--gray-50); }
+        .badge {
+            display: inline-block; padding: 2px 8px; border-radius: 10px;
+            font-size: 11px; font-weight: 500;
+        }
+        .badge-success { background: var(--success-bg); color: var(--success); }
+        .badge-warning { background: var(--warning-bg); color: var(--warning); }
+        .badge-danger { background: var(--danger-bg); color: var(--danger); }
+        .badge-info { background: var(--primary-bg); color: var(--primary); }
+
+        .log-list { display: flex; flex-direction: column; gap: 0; }
+        .log-item {
+            display: flex; align-items: flex-start; gap: 12px;
+            padding: 10px 0; border-bottom: 1px solid var(--gray-100);
+        }
+        .log-item:last-child { border-bottom: none; }
+        .log-time {
+            font-size: 11px; color: var(--gray-400); white-space: nowrap;
+            min-width: 90px; padding-top: 2px;
+        }
+        .log-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            margin-top: 6px; flex-shrink: 0;
+        }
+        .log-dot.blue { background: var(--primary); }
+        .log-dot.green { background: var(--success); }
+        .log-dot.orange { background: var(--accent); }
+        .log-dot.gray { background: var(--gray-300); }
+        .log-text { font-size: 13px; color: var(--gray-600); }
+
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5); z-index: 1000;
+            align-items: center; justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+        .modal-overlay.show { display: flex; }
+        .modal {
+            background: white; border-radius: 16px; padding: 28px;
+            max-width: 520px; width: 90%; max-height: 80vh; overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .modal h3 { font-size: 18px; font-weight: 600; margin-bottom: 12px; }
+        .modal p { font-size: 14px; color: var(--gray-600); margin-bottom: 16px; line-height: 1.6; }
+        .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+        .copy-box {
+            background: var(--gray-50); border: 1px solid var(--gray-200);
+            border-radius: 8px; padding: 14px; font-size: 13px;
+            color: var(--gray-700); line-height: 1.6; margin-bottom: 12px;
+            position: relative; cursor: pointer;
+        }
+        .copy-box:hover { border-color: var(--primary); }
+        .copy-hint {
+            position: absolute; top: 8px; right: 10px;
+            font-size: 11px; color: var(--gray-400);
+        }
+
+        .toast {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
+            background: var(--gray-800); color: white; padding: 12px 24px;
+            border-radius: 10px; font-size: 14px; z-index: 2000;
+            transition: transform 0.3s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+
+        .actions-row {
+            display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap;
+        }
+
+        .empty-state {
+            text-align: center; padding: 40px 20px; color: var(--gray-400);
+        }
+        .empty-state .icon { font-size: 40px; margin-bottom: 12px; }
+        .empty-state p { font-size: 14px; }
+
+        @media (max-width: 768px) {
+            .header { padding: 16px 20px; flex-direction: column; align-items: flex-start; gap: 12px; }
+            .container { padding: 16px; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .trigger-grid { grid-template-columns: 1fr; }
+            .settings-grid { grid-template-columns: 1fr; }
+            .task-item { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .btn-group { width: 100%; }
+        }
+
+        /* ====== Real-time submission area ====== */
+        .live-section {
+            background: white; border-radius: var(--radius); padding: 24px;
+            box-shadow: var(--shadow); margin-bottom: 20px;
+            border: 1px solid var(--gray-200);
+        }
+        .live-header {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--gray-100);
+        }
+        .live-title {
+            font-size: 16px; font-weight: 600; color: var(--gray-800);
+            display: flex; align-items: center; gap: 8px;
+        }
+        .live-status {
+            display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--gray-500);
+        }
+        .live-status .dot {
+            width: 6px; height: 6px; border-radius: 50%; background: #34d399;
+            animation: pulse 2s infinite;
+        }
+        .live-status .dot.error { background: var(--danger); }
+        .live-status .time { color: var(--gray-400); }
+        .submission-list {
+            max-height: 360px; overflow-y: auto;
+        }
+        .submission-item {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 12px 16px; border-radius: 8px; border: 1px solid var(--gray-100);
+            margin-bottom: 8px; transition: all 0.3s;
+        }
+        .submission-item:hover { border-color: var(--primary-light); background: var(--gray-50); }
+        .submission-item.new-highlight {
+            animation: highlightFlash 2s ease;
+            border-color: var(--accent);
+            background: #fff7ed;
+        }
+        @keyframes highlightFlash {
+            0%, 100% { background: transparent; border-color: var(--gray-100); }
+            10%, 30% { background: #fff7ed; border-color: var(--accent); }
+            50% { background: transparent; border-color: var(--gray-100); }
+            70%, 90% { background: #fff7ed; border-color: var(--accent); }
+        }
+        .submission-left {
+            display: flex; align-items: center; gap: 12px;
+        }
+        .submission-avatar {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white; display: flex; align-items: center; justify-content: center;
+            font-size: 14px; font-weight: 600; flex-shrink: 0;
+        }
+        .submission-info { line-height: 1.4; }
+        .submission-name { font-size: 14px; font-weight: 600; color: var(--gray-800); }
+        .submission-brand { font-size: 12px; color: var(--gray-500); }
+        .submission-right {
+            text-align: right; flex-shrink: 0;
+        }
+        .submission-score { font-size: 18px; font-weight: 700; }
+        .submission-score.pass { color: var(--success); }
+        .submission-score.fail { color: var(--danger); }
+        .submission-time { font-size: 11px; color: var(--gray-400); margin-top: 2px; }
+        .submission-pass-badge {
+            display: inline-block; padding: 1px 6px; border-radius: 8px;
+            font-size: 10px; font-weight: 500; margin-top: 2px;
+        }
+        .submission-pass-badge.yes { background: var(--success-bg); color: var(--success); }
+        .submission-pass-badge.no { background: var(--danger-bg); color: var(--danger); }
+        .live-empty {
+            text-align: center; padding: 40px 20px; color: var(--gray-400);
+        }
+        .live-empty .icon { font-size: 36px; margin-bottom: 8px; }
+
+        /* ====== Toast notification (top-right) ====== */
+        .toast-notification {
+            position: fixed; top: 20px; right: 20px; z-index: 3000;
+            background: white; border-radius: 12px; padding: 16px 20px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15); border-left: 4px solid var(--accent);
+            transform: translateX(400px); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-width: 340px; cursor: pointer;
+        }
+        .toast-notification.show { transform: translateX(0); }
+        .toast-notification .toast-title {
+            font-size: 14px; font-weight: 600; color: var(--gray-800); margin-bottom: 4px;
+        }
+        .toast-notification .toast-body {
+            font-size: 12px; color: var(--gray-500); line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="header-left">
+        <h1>🎯 置换管理智能中枢</h1>
+        <p>自动化培训考核系统控制台</p>
+    </div>
+    <div class="header-right">
+        <div class="status-badge">
+            <div class="status-dot" id="systemStatusDot"></div>
+            <span id="systemStatusText">系统运行中</span>
+        </div>
+        <div class="header-time" id="currentTime"></div>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Stats -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-value" id="statTasks">4</div>
+            <div class="stat-label">自动化任务</div>
+            <div class="stat-sub">个定时任务运行中</div>
+        </div>
+        <div class="stat-card accent">
+            <div class="stat-value" id="statMonth">7月</div>
+            <div class="stat-label">本月对标品牌</div>
+            <div class="stat-sub" id="statBrand">理想 VS 特斯拉</div>
+        </div>
+        <div class="stat-card success">
+            <div class="stat-value" id="statQuestions">131</div>
+            <div class="stat-label">题库总量</div>
+            <div class="stat-sub">道考核题目</div>
+        </div>
+        <div class="stat-card warning">
+            <div class="stat-value" id="statPending">1</div>
+            <div class="stat-label">待处理</div>
+            <div class="stat-sub">人待答题</div>
+        </div>
+    </div>
+
+    <!-- 📡 实时答题动态 -->
+    <div class="live-section">
+        <div class="live-header">
+            <div class="live-title">
+                📡 实时答题动态
+                <span class="section-badge" id="liveCount">0条记录</span>
+            </div>
+            <div class="live-status">
+                <span class="dot" id="liveDot"></span>
+                <span id="liveStatusText">自动刷新中（每10秒）</span>
+                <span class="time" id="liveLastRefresh"></span>
+            </div>
+        </div>
+        <div class="submission-list" id="submissionList">
+            <div class="live-empty">
+                <div class="icon">📡</div>
+                <p>等待答题数据加载...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 定时任务管理 -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-title">
+                📋 定时任务管理
+                <span class="section-badge" id="activeTaskCount">4个运行中</span>
+            </div>
+            <div style="display:flex;gap:8px;">
+                <button class="btn btn-primary btn-sm" onclick="addTask()">+ 新建任务</button>
+                <button class="btn btn-outline btn-sm" onclick="refreshTasks()">🔄 刷新</button>
+            </div>
+        </div>
+        <div class="task-list" id="taskList">
+            <!-- Rendered by JS -->
+        </div>
+    </div>
+
+    <!-- 手动触发 -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-title">🚀 手动触发</div>
+        </div>
+        <div class="trigger-grid" id="triggerGrid">
+            <!-- Rendered by JS -->
+        </div>
+    </div>
+
+    <!-- 系统设置 -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-title">⚙️ 系统设置</div>
+        </div>
+        <div class="settings-grid">
+            <div class="setting-item">
+                <div class="setting-label">及格分数线</div>
+                <input type="number" class="setting-input" id="setPassScore" min="0" max="100" value="80">
+                <div class="setting-hint">满分100分，低于此分数视为不达标</div>
+            </div>
+            <div class="setting-item">
+                <div class="setting-label">当月对标品牌</div>
+                <input type="text" class="setting-input" id="setBrand" value="理想">
+                <div class="setting-hint">每月1号可更换对标品牌</div>
+            </div>
+            <div class="setting-item">
+                <div class="setting-label">考题推送日</div>
+                <input type="number" class="setting-input" id="setExamDay" min="1" max="28" value="15">
+                <div class="setting-hint">每月几号推送考题给员工</div>
+            </div>
+            <div class="setting-item">
+                <div class="setting-label">答题截止日</div>
+                <input type="number" class="setting-input" id="setDeadline" min="1" max="28" value="20">
+                <div class="setting-hint">每月几号前必须完成答题</div>
+            </div>
+            <div class="setting-item">
+                <div class="setting-label">复测间隔</div>
+                <div class="setting-label" style="margin-top:4px">未达标后几天进行复测</div>
+                <input type="number" class="setting-input" id="setRetestDays" min="1" max="7" value="1">
+            </div>
+            <div class="setting-item">
+                <div class="setting-label">飞书推送群</div>
+                <input type="text" class="setting-input" id="setFeishuGroup" value="交流" readonly style="background:var(--gray-50);">
+                <div class="setting-hint">当前绑定：「交流」群</div>
+            </div>
+            <div class="setting-item">
+                <div class="setting-label">未答题提醒</div>
+                <div class="toggle-wrap">
+                    <div class="toggle active" id="toggleReminder" onclick="toggleSetting(this)"></div>
+                    <span class="toggle-label">开启自动提醒</span>
+                </div>
+                <div class="setting-hint">超时未答题自动推送提醒</div>
+            </div>
+            <div class="setting-item">
+                <div class="setting-label">自动复测</div>
+                <div class="toggle-wrap">
+                    <div class="toggle active" id="toggleRetest" onclick="toggleSetting(this)"></div>
+                    <span class="toggle-label">开启自动复测</span>
+                </div>
+                <div class="setting-hint">未达标自动生成复测任务</div>
+            </div>
+        </div>
+        <div class="actions-row">
+            <button class="btn btn-primary" onclick="saveSettings()">💾 保存设置</button>
+            <button class="btn btn-outline" onclick="resetSettings()">↩️ 恢复默认</button>
+        </div>
+    </div>
+
+    <!-- 员工管理 -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-title">👥 员工管理</div>
+            <button class="btn btn-primary btn-sm" onclick="showAddEmployee()">+ 添加员工</button>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>姓名</th>
+                        <th>本月成绩</th>
+                        <th>状态</th>
+                        <th>答题轮次</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="employeeTable">
+                    <!-- Rendered by JS -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 操作日志 -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-title">📊 最近操作记录</div>
+            <button class="btn btn-outline btn-sm" onclick="clearLogs()">清空日志</button>
+        </div>
+        <div class="log-list" id="logList">
+            <!-- Rendered by JS -->
+        </div>
+    </div>
+
+    <!-- 底部操作 -->
+    <div class="section" style="background: var(--gray-50); border: 1px dashed var(--gray-300);">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+            <div style="font-size:13px; color:var(--gray-500);">
+                数据存储在本地浏览器 · 修改后点击保存生效
+            </div>
+            <div style="display:flex; gap:10px;">
+                <button class="btn btn-outline btn-sm" onclick="exportConfig()">📤 导出配置</button>
+                <button class="btn btn-outline btn-sm" onclick="importConfig()">📥 导入配置</button>
+                <button class="btn btn-outline btn-sm" onclick="syncFeishu()">🔄 同步飞书数据</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
+    <div class="modal" id="modalContent"></div>
+</div>
+
+<!-- Toast (bottom) -->
+<div class="toast" id="toast"></div>
+
+<!-- Toast Notification (top-right for new submissions) -->
+<div class="toast-notification" id="toastNotification" onclick="this.classList.remove('show')">
+    <div class="toast-title" id="toastNotifTitle"></div>
+    <div class="toast-body" id="toastNotifBody"></div>
+</div>
+
+<script>
+// ====== Data & State ======
+const DEFAULT_SETTINGS = {
+    passScore: 80,
+    brand: '理想',
+    examDay: 15,
+    deadline: 20,
+    retestDays: 1,
+    feishuGroup: '交流',
+    reminderEnabled: true,
+    retestEnabled: true
+};
+
+const TASKS = [
+    {
+        id: 'monthly_brand',
+        name: '月度品牌对标生成',
+        desc: '搜索最新数据 → 生成对标分析+话术+考题+PPT → 推送飞书群',
+        schedule: '每月1号 09:30',
+        status: 'active',
+        statusText: '运行中',
+        triggerCmd: '本月对标品牌换成【XX】，帮我生成全套对标内容',
+        lastRun: '2026-07-01',
+        nextRun: '2026-08-01'
+    },
+    {
+        id: 'monthly_exam',
+        name: '月度考核抽题推送',
+        desc: '从飞书题库抽题组卷 → 生成答题卡 → 推送飞书群',
+        schedule: '每月15号 09:30',
+        status: 'active',
+        statusText: '运行中',
+        triggerCmd: '从题库抽题，生成本月答题卡并推送给全员',
+        lastRun: '2026-07-01',
+        nextRun: '2026-08-15'
+    },
+    {
+        id: 'monthly_check',
+        name: '月底达标检查',
+        desc: '检查飞书答题记录表，统计达标情况，未达标提醒管理员',
+        schedule: '每月28号 09:30',
+        status: 'active',
+        statusText: '运行中',
+        triggerCmd: '检查本月全员考核达标情况',
+        lastRun: '-',
+        nextRun: '2026-07-28'
+    },
+    {
+        id: 'adhoc_score',
+        name: '答题评分与培训推送',
+        desc: '员工提交答案后自动评分，未达标生成专项培训材料',
+        schedule: '答题截止后自动触发',
+        status: 'waiting',
+        statusText: '等待答题',
+        triggerCmd: '检查赵的答题情况，如果已提交就帮忙评分',
+        lastRun: '2026-07-02',
+        nextRun: '待触发'
+    }
+];
+
+const TRIGGERS = [
+    {
+        title: '📝 生成本月答题卡',
+        desc: '从当前品牌题库中抽题组卷，生成交互式答题卡并发布链接',
+        cmd: '从飞书题库抽题，生成本月答题卡并推送给全员'
+    },
+    {
+        title: '📊 对员工进行评分',
+        desc: '读取已提交的答案，对照正确答案评分并写入飞书表格',
+        cmd: '检查全员答题情况，已提交的帮忙评分'
+    },
+    {
+        title: '📚 生成专项培训材料',
+        desc: '根据薄弱知识点自动生成针对性培训内容并推送',
+        cmd: '根据XX的错题和薄弱知识点，生成专项培训材料'
+    },
+    {
+        title: '🔄 生成复测考卷',
+        desc: '针对未达标员工的薄弱知识点重新出题进行复测',
+        cmd: '为XX生成复测考卷，重点考察薄弱知识点'
+    },
+    {
+        title: '📋 同步飞书题库数据',
+        desc: '从飞书多维表格同步最新题库和答题记录',
+        cmd: '同步飞书多维表格的题库和答题记录数据'
+    },
+    {
+        title: '🔔 推送考核提醒',
+        desc: '向飞书群推送考核提醒消息',
+        cmd: '给飞书群推送一条考核提醒'
+    }
+];
+
+const DEFAULT_EMPLOYEES = [
+    { name: '赵', score: '待答题', status: '待答题', rounds: 0, recordId: 'recvo58hfK3gvr' },
+];
+
+const DEFAULT_LOGS = [
+    { time: '07-02 11:31', text: '复测提醒已推送（测试员-模拟）', type: 'orange' },
+    { time: '07-02 09:46', text: '赵答题检查完成，尚未答题，已推送提醒', type: 'orange' },
+    { time: '07-01 11:29', text: '考核闭环端到端测试完成', type: 'green' },
+    { time: '07-01 11:25', text: '模拟评分完成：测试员-模拟 72分（未达标）', type: 'blue' },
+    { time: '07-01 11:08', text: '理想VS特斯拉答题卡推送飞书群', type: 'blue' },
+    { time: '07-01 11:03', text: '理想VS特斯拉考核考题生成（37题100分）', type: 'green' },
+    { time: '07-01 09:42', text: '考核系统基础设施搭建完成', type: 'green' },
+];
+
+// ====== State ======
+let settings = { ...DEFAULT_SETTINGS };
+let employees = [...DEFAULT_EMPLOYEES];
+let logs = [...DEFAULT_LOGS];
+let taskStates = TASKS.map(t => ({ ...t }));
+
+// ====== Init ======
+function init() {
+    loadState();
+    renderTasks();
+    renderTriggers();
+    renderSettings();
+    renderEmployees();
+    renderLogs();
+    updateStats();
+    updateTime();
+    setInterval(updateTime, 1000);
+}
+
+function loadState() {
+    try {
+        const saved = localStorage.getItem('hub_settings');
+        if (saved) settings = { ...DEFAULT_SETTINGS, ...JSON.parse(saved) };
+        const savedEmp = localStorage.getItem('hub_employees');
+        if (savedEmp) employees = JSON.parse(savedEmp);
+        const savedLogs = localStorage.getItem('hub_logs');
+        if (savedLogs) logs = JSON.parse(savedLogs);
+        const savedTasks = localStorage.getItem('hub_tasks');
+        if (savedTasks) {
+            const customTasks = JSON.parse(savedTasks);
+            taskStates = TASKS.map(t => {
+                const custom = customTasks.find(ct => ct.id === t.id);
+                return custom ? { ...t, ...custom } : { ...t };
+            });
+            // Add any custom tasks that don't exist in defaults
+            customTasks.forEach(ct => {
+                if (!taskStates.find(t => t.id === ct.id)) {
+                    taskStates.push(ct);
+                }
+            });
+        }
+    } catch(e) { console.error('Load state error:', e); }
+}
+
+function saveState() {
+    try {
+        localStorage.setItem('hub_settings', JSON.stringify(settings));
+        localStorage.setItem('hub_employees', JSON.stringify(employees));
+        localStorage.setItem('hub_logs', JSON.stringify(logs));
+        localStorage.setItem('hub_tasks', JSON.stringify(taskStates));
+    } catch(e) { console.error('Save state error:', e); }
+}
+
+// ====== Render Functions ======
+function renderTasks() {
+    const el = document.getElementById('taskList');
+    const activeCount = taskStates.filter(t => t.status === 'active').length;
+    document.getElementById('activeTaskCount').textContent = activeCount + '个运行中';
+
+    el.innerHTML = taskStates.map((t, idx) => `
+        <div class="task-item">
+            <div class="task-info">
+                <div class="task-name">${t.name}</div>
+                <div class="task-desc">${t.desc}</div>
+                <div class="task-meta">
+                    <span class="task-schedule">⏰ ${t.schedule}</span>
+                    <span class="task-status ${t.status}">${t.statusText}</span>
+                    <span class="task-schedule">上次: ${t.lastRun}</span>
+                    <span class="task-schedule">下次: ${t.nextRun}</span>
+                </div>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-outline btn-sm" onclick="toggleTask('${t.id}')">${t.status === 'active' ? '⏸ 暂停' : '▶ 启用'}</button>
+                <button class="btn btn-primary btn-sm" onclick="editTask(${idx})">✏️ 编辑</button>
+                <button class="btn btn-accent btn-sm" onclick="showTriggerModal('${t.triggerCmd.replace(/'/g, "\\'")}', '${t.name.replace(/'/g, "\\'")}')">手动执行</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function renderTriggers() {
+    const el = document.getElementById('triggerGrid');
+    el.innerHTML = TRIGGERS.map((t, i) => `
+        <div class="trigger-card">
+            <h4>${t.title}</h4>
+            <p>${t.desc}</p>
+            <button class="btn btn-accent btn-sm" onclick="showTriggerModal('${t.cmd.replace(/'/g, "\\'")}', '${t.title.replace(/'/g, "\\'")}')">🚀 立即执行</button>
+        </div>
+    `).join('');
+}
+
+function renderSettings() {
+    document.getElementById('setPassScore').value = settings.passScore;
+    document.getElementById('setBrand').value = settings.brand;
+    document.getElementById('setExamDay').value = settings.examDay;
+    document.getElementById('setDeadline').value = settings.deadline;
+    document.getElementById('setRetestDays').value = settings.retestDays;
+    document.getElementById('setFeishuGroup').value = settings.feishuGroup;
+    document.getElementById('toggleReminder').className = 'toggle' + (settings.reminderEnabled ? ' active' : '');
+    document.getElementById('toggleRetest').className = 'toggle' + (settings.retestEnabled ? ' active' : '');
+}
+
+function renderEmployees() {
+    const el = document.getElementById('employeeTable');
+    if (employees.length === 0) {
+        el.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--gray-400);padding:30px;">暂无员工，点击"添加员工"开始</td></tr>`;
+        return;
+    }
+    el.innerHTML = employees.map((emp, i) => {
+        let statusBadge = '';
+        if (emp.status === '待答题') statusBadge = '<span class="badge badge-warning">待答题</span>';
+        else if (emp.status === '已达标') statusBadge = '<span class="badge badge-success">已达标</span>';
+        else if (emp.status === '未达标') statusBadge = '<span class="badge badge-danger">未达标</span>';
+        else if (emp.status === '已评分') statusBadge = '<span class="badge badge-info">已评分</span>';
+        else statusBadge = `<span class="badge badge-info">${emp.status}</span>`;
+
+        return `<tr>
+            <td style="font-weight:600">${emp.name}</td>
+            <td>${typeof emp.score === 'number' ? emp.score + '分' : emp.score}</td>
+            <td>${statusBadge}</td>
+            <td>${emp.rounds}轮</td>
+            <td>
+                <button class="btn btn-outline btn-sm" onclick="editEmployee(${i})">✏️</button>
+                <button class="btn btn-outline btn-sm" onclick="removeEmployee(${i})" style="color:var(--danger)">🗑</button>
+            </td>
+        </tr>`;
+    }).join('');
+}
+
+function renderLogs() {
+    const el = document.getElementById('logList');
+    if (logs.length === 0) {
+        el.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>暂无操作记录</p></div>';
+        return;
+    }
+    el.innerHTML = logs.slice(0, 15).map(l => `
+        <div class="log-item">
+            <span class="log-time">${l.time}</span>
+            <span class="log-dot ${l.type || 'blue'}"></span>
+            <span class="log-text">${l.text}</span>
+        </div>
+    `).join('');
+}
+
+function updateStats() {
+    document.getElementById('statMonth').textContent = new Date().getMonth() + 1 + '月';
+    document.getElementById('statBrand').textContent = settings.brand + ' VS 特斯拉';
+    document.getElementById('statPending').textContent = employees.filter(e => e.status === '待答题').length;
+}
+
+function updateTime() {
+    const now = new Date();
+    const str = now.getFullYear() + '年' + (now.getMonth()+1) + '月' + now.getDate() + '日 ' +
+        now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0') + ':' + now.getSeconds().toString().padStart(2,'0');
+    document.getElementById('currentTime').textContent = str;
+}
+
+// ====== Actions ======
+function saveSettings() {
+    settings.passScore = parseInt(document.getElementById('setPassScore').value) || 80;
+    settings.brand = document.getElementById('setBrand').value.trim() || '理想';
+    settings.examDay = parseInt(document.getElementById('setExamDay').value) || 15;
+    settings.deadline = parseInt(document.getElementById('setDeadline').value) || 20;
+    settings.retestDays = parseInt(document.getElementById('setRetestDays').value) || 1;
+    settings.feishuGroup = document.getElementById('setFeishuGroup').value.trim() || '交流';
+    settings.reminderEnabled = document.getElementById('toggleReminder').classList.contains('active');
+    settings.retestEnabled = document.getElementById('toggleRetest').classList.contains('active');
+    saveState();
+    updateStats();
+    showToast('✅ 设置已保存');
+    addLog('系统设置已更新', 'blue');
+}
+
+function resetSettings() {
+    if (!confirm('确定要恢复默认设置吗？')) return;
+    settings = { ...DEFAULT_SETTINGS };
+    saveState();
+    renderSettings();
+    updateStats();
+    showToast('↩️ 已恢复默认设置');
+}
+
+function toggleSetting(el) {
+    el.classList.toggle('active');
+}
+
+function toggleTask(taskId) {
+    const task = taskStates.find(t => t.id === taskId);
+    if (!task) return;
+    if (task.status === 'active') {
+        task.status = 'paused';
+        task.statusText = '已暂停';
+        showToast('⏸ 已暂停: ' + task.name);
+        addLog('已暂停任务: ' + task.name, 'orange');
+    } else {
+        task.status = 'active';
+        task.statusText = '运行中';
+        showToast('▶ 已启用: ' + task.name);
+        addLog('已启用任务: ' + task.name, 'green');
+    }
+    saveState();
+    renderTasks();
+}
+
+function editTask(idx) {
+    const t = taskStates[idx];
+    if (!t) return;
+    // Parse schedule into components
+    let freq = 'MONTHLY', day = '', time = '09:30', customSchedule = '';
+    const schedMatch = t.schedule.match(/每月(\d+)号\s*(\d{1,2}:\d{2})/);
+    if (schedMatch) { day = schedMatch[1]; time = schedMatch[2]; }
+    else if (t.schedule.includes('每天')) { freq = 'DAILY'; const tm = t.schedule.match(/(\d{1,2}:\d{2})/); if (tm) time = tm[1]; }
+    else if (t.schedule.includes('每周')) { freq = 'WEEKLY'; customSchedule = t.schedule; }
+    else if (t.schedule.includes('自动触发') || t.schedule.includes('待触发')) { freq = 'MANUAL'; customSchedule = t.schedule; }
+    else { customSchedule = t.schedule; }
+
+    const weekDays = ['一','二','三','四','五','六','日'];
+    const modal = document.getElementById('modalContent');
+    modal.innerHTML = `
+        <h3>✏️ 编辑任务</h3>
+        <div class="settings-grid" style="gap:14px;">
+            <div class="setting-item">
+                <div class="setting-label">任务名称</div>
+                <input type="text" class="setting-input" id="editTaskName" value="${t.name}">
+            </div>
+            <div class="setting-item">
+                <div class="setting-label">任务描述</div>
+                <input type="text" class="setting-input" id="editTaskDesc" value="${t.desc}">
+            </div>
+            <div class="setting-item">
+                <div class="setting-label">执行频率</div>
+                <select class="setting-input" id="editTaskFreq" onchange="onFreqChange()">
+                    <option value="MONTHLY" ${freq==='MONTHLY'?'selected':''}>每月</option>
+                    <option value="WEEKLY" ${freq==='WEEKLY'?'selected':''}>每周</option>
+                    <option value="DAILY" ${freq==='DAILY'?'selected':''}>每天</option>
+                    <option value="MANUAL" ${freq==='MANUAL'?'selected':''}>手动触发</option>
+                    <option value="CUSTOM" ${freq==='CUSTOM'?'selected':''}>自定义</option>
+                </select>
+            </div>
+            <div class="setting-item" id="editDayWrap" style="${freq==='MONTHLY'?'':'display:none'}">
+                <div class="setting-label">每月几号执行</div>
+                <input type="number" class="setting-input" id="editTaskDay" min="1" max="28" value="${day}">
+            </div>
+            <div class="setting-item" id="editWeekDayWrap" style="${freq==='WEEKLY'?'':'display:none'}">
+                <div class="setting-label">每周几执行</div>
+                <select class="setting-input" id="editTaskWeekDay">
+                    ${weekDays.map((d,i) => `<option value="${i+1}">周${d}</option>`).join('')}
+                </select>
+            </div>
+            <div class="setting-item" id="editTimeWrap" style="${freq==='MANUAL'?'display:none':''}">
+                <div class="setting-label">执行时间</div>
+                <input type="time" class="setting-input" id="editTaskTime" value="${time}">
+            </div>
+            <div class="setting-item" id="editCustomWrap" style="${freq==='CUSTOM'?'':'display:none'}">
+                <div class="setting-label">自定义调度说明</div>
+                <input type="text" class="setting-input" id="editTaskCustom" value="${customSchedule}" placeholder="如：每周一三五 10:00">
+            </div>
+            <div class="setting-item">
+                <div class="setting-label">手动执行指令</div>
+                <input type="text" class="setting-input" id="editTaskCmd" value="${t.triggerCmd}">
+                <div class="setting-hint">点击"手动执行"时复制到剪贴板的指令</div>
+            </div>
+            <div class="setting-item">
+                <div class="setting-label">上次执行</div>
+                <input type="text" class="setting-input" id="editTaskLastRun" value="${t.lastRun}">
+            </div>
+            <div class="setting-item">
+                <div class="setting-label">下次执行</div>
+                <input type="text" class="setting-input" id="editTaskNextRun" value="${t.nextRun}">
+            </div>
+        </div>
+        <div class="modal-actions" style="margin-top:20px;">
+            <button class="btn btn-danger btn-sm" onclick="deleteTask(${idx})" style="margin-right:auto;">🗑 删除任务</button>
+            <button class="btn btn-outline" onclick="closeModal()">取消</button>
+            <button class="btn btn-primary" onclick="saveTaskEdit(${idx})">💾 保存</button>
+        </div>
+    `;
+    document.getElementById('modalOverlay').classList.add('show');
+}
+
+function onFreqChange() {
+    const freq = document.getElementById('editTaskFreq').value;
+    document.getElementById('editDayWrap').style.display = freq === 'MONTHLY' ? '' : 'none';
+    document.getElementById('editWeekDayWrap').style.display = freq === 'WEEKLY' ? '' : 'none';
+    document.getElementById('editTimeWrap').style.display = freq === 'MANUAL' ? 'none' : '';
+    document.getElementById('editCustomWrap').style.display = freq === 'CUSTOM' ? '' : 'none';
+}
+
+function saveTaskEdit(idx) {
+    const t = taskStates[idx];
+    if (!t) return;
+    const name = document.getElementById('editTaskName').value.trim();
+    const desc = document.getElementById('editTaskDesc').value.trim();
+    const freq = document.getElementById('editTaskFreq').value;
+    const time = document.getElementById('editTaskTime').value || '09:30';
+    const cmd = document.getElementById('editTaskCmd').value.trim();
+    const lastRun = document.getElementById('editTaskLastRun').value.trim();
+    const nextRun = document.getElementById('editTaskNextRun').value.trim();
+
+    if (!name) { showToast('⚠️ 任务名称不能为空'); return; }
+
+    // Build schedule string
+    let schedule = '';
+    if (freq === 'MONTHLY') {
+        const day = document.getElementById('editTaskDay').value || '1';
+        schedule = `每月${day}号 ${time}`;
+    } else if (freq === 'WEEKLY') {
+        const wd = document.getElementById('editTaskWeekDay').value;
+        const weekNames = ['一','二','三','四','五','六','日'];
+        schedule = `每周${weekNames[wd-1]} ${time}`;
+    } else if (freq === 'DAILY') {
+        schedule = `每天 ${time}`;
+    } else if (freq === 'MANUAL') {
+        schedule = '手动触发';
+    } else {
+        schedule = document.getElementById('editTaskCustom').value.trim() || '自定义';
+    }
+
+    t.name = name;
+    t.desc = desc;
+    t.schedule = schedule;
+    t.triggerCmd = cmd || t.triggerCmd;
+    t.lastRun = lastRun || '-';
+    t.nextRun = nextRun || '待确认';
+
+    saveState();
+    renderTasks();
+    closeModal();
+    showToast('✅ 任务已更新: ' + name);
+    addLog('修改任务: ' + name, 'blue');
+}
+
+function addTask() {
+    const modal = document.getElementById('modalContent');
+    modal.innerHTML = `
+        <h3>➕ 新建定时任务</h3>
+        <div class="settings-grid" style="gap:14px;">
+            <div class="setting-item">
+                <div class="setting-label">任务名称 *</div>
+                <input type="text" class="setting-input" id="newTaskName" placeholder="如：每周话术更新">
+            </div>
+            <div class="setting-item">
+                <div class="setting-label">任务描述</div>
+                <input type="text" class="setting-input" id="newTaskDesc" placeholder="任务做什么">
+            </div>
+            <div class="setting-item">
+                <div class="setting-label">执行频率</div>
+                <select class="setting-input" id="newTaskFreq" onchange="onNewTaskFreqChange()">
+                    <option value="MONTHLY">每月</option>
+                    <option value="WEEKLY">每周</option>
+                    <option value="DAILY">每天</option>
+                    <option value="MANUAL">手动触发</option>
+                </select>
+            </div>
+            <div class="setting-item" id="newDayWrap">
+                <div class="setting-label">每月几号执行</div>
+                <input type="number" class="setting-input" id="newTaskDay" min="1" max="28" value="1">
+            </div>
+            <div class="setting-item" id="newWeekDayWrap" style="display:none">
+                <div class="setting-label">每周几执行</div>
+                <select class="setting-input" id="newTaskWeekDay">
+                    <option value="1">周一</option><option value="2">周二</option><option value="3">周三</option>
+                    <option value="4">周四</option><option value="5">周五</option><option value="6">周六</option><option value="0">周日</option>
+                </select>
+            </div>
+            <div class="setting-item">
+                <div class="setting-label">执行时间</div>
+                <input type="time" class="setting-input" id="newTaskTime" value="09:30">
+            </div>
+            <div class="setting-item">
+                <div class="setting-label">手动执行指令</div>
+                <input type="text" class="setting-input" id="newTaskCmd" placeholder="点击手动执行时复制的指令">
+            </div>
+        </div>
+        <div class="modal-actions" style="margin-top:20px;">
+            <button class="btn btn-outline" onclick="closeModal()">取消</button>
+            <button class="btn btn-primary" onclick="confirmAddTask()">✅ 创建任务</button>
+        </div>
+    `;
+    document.getElementById('modalOverlay').classList.add('show');
+    setTimeout(() => document.getElementById('newTaskName').focus(), 100);
+}
+
+function onNewTaskFreqChange() {
+    const freq = document.getElementById('newTaskFreq').value;
+    document.getElementById('newDayWrap').style.display = freq === 'MONTHLY' ? '' : 'none';
+    document.getElementById('newWeekDayWrap').style.display = freq === 'WEEKLY' ? '' : 'none';
+}
+
+function confirmAddTask() {
+    const name = document.getElementById('newTaskName').value.trim();
+    if (!name) { showToast('⚠️ 请输入任务名称'); return; }
+    const desc = document.getElementById('newTaskDesc').value.trim() || '自定义任务';
+    const freq = document.getElementById('newTaskFreq').value;
+    const time = document.getElementById('newTaskTime').value || '09:30';
+    const cmd = document.getElementById('newTaskCmd').value.trim() || '执行任务: ' + name;
+
+    let schedule = '';
+    if (freq === 'MONTHLY') {
+        const day = document.getElementById('newTaskDay').value || '1';
+        schedule = `每月${day}号 ${time}`;
+    } else if (freq === 'WEEKLY') {
+        const wd = document.getElementById('newTaskWeekDay').value;
+        const weekNames = ['日','一','二','三','四','五','六'];
+        schedule = `每周${weekNames[wd]} ${time}`;
+    } else if (freq === 'DAILY') {
+        schedule = `每天 ${time}`;
+    } else {
+        schedule = '手动触发';
+    }
+
+    const id = 'custom_' + Date.now();
+    taskStates.push({
+        id, name, desc, schedule,
+        status: 'active', statusText: '运行中',
+        triggerCmd: cmd, lastRun: '-', nextRun: '待确认'
+    });
+    saveState();
+    renderTasks();
+    updateStats();
+    closeModal();
+    showToast('✅ 任务已创建: ' + name);
+    addLog('新建任务: ' + name + '（' + schedule + '）', 'green');
+}
+
+function deleteTask(idx) {
+    const t = taskStates[idx];
+    if (!t) return;
+    if (!confirm('确定删除任务「' + t.name + '」吗？此操作不可撤销。')) return;
+    const name = t.name;
+    taskStates.splice(idx, 1);
+    saveState();
+    renderTasks();
+    updateStats();
+    closeModal();
+    showToast('🗑 已删除: ' + name);
+    addLog('删除任务: ' + name, 'orange');
+}
+
+function showTriggerModal(cmd, title) {
+    const modal = document.getElementById('modalContent');
+    modal.innerHTML = `
+        <h3>🚀 ${title}</h3>
+        <p>点击下方指令文本可复制，然后发送给助手即可触发执行：</p>
+        <div class="copy-box" onclick="copyText(this.querySelector('.copy-content').textContent)">
+            <span class="copy-hint">点击复制</span>
+            <div class="copy-content">${cmd}</div>
+        </div>
+        <p style="font-size:12px;color:var(--gray-400)">💡 助手会根据指令自动完成对应的操作</p>
+        <div class="modal-actions">
+            <button class="btn btn-outline" onclick="closeModal()">关闭</button>
+            <button class="btn btn-primary" onclick="copyText('${cmd.replace(/'/g, "\\'")}');closeModal()">📋 复制指令</button>
+        </div>
+    `;
+    document.getElementById('modalOverlay').classList.add('show');
+}
+
+function showAddEmployee() {
+    const modal = document.getElementById('modalContent');
+    modal.innerHTML = `
+        <h3>➕ 添加员工</h3>
+        <div class="setting-item" style="margin-bottom:12px">
+            <div class="setting-label">员工姓名</div>
+            <input type="text" class="setting-input" id="newEmpName" placeholder="输入姓名">
+        </div>
+        <div class="modal-actions">
+            <button class="btn btn-outline" onclick="closeModal()">取消</button>
+            <button class="btn btn-primary" onclick="addEmployee()">确认添加</button>
+        </div>
+    `;
+    document.getElementById('modalOverlay').classList.add('show');
+    setTimeout(() => document.getElementById('newEmpName').focus(), 100);
+}
+
+function addEmployee() {
+    const name = document.getElementById('newEmpName').value.trim();
+    if (!name) { showToast('⚠️ 请输入姓名'); return; }
+    employees.push({ name, score: '待答题', status: '待答题', rounds: 0 });
+    saveState();
+    renderEmployees();
+    updateStats();
+    closeModal();
+    showToast('✅ 已添加: ' + name);
+    addLog('添加新员工: ' + name, 'green');
+}
+
+function editEmployee(index) {
+    const emp = employees[index];
+    const modal = document.getElementById('modalContent');
+    modal.innerHTML = `
+        <h3>✏️ 编辑员工: ${emp.name}</h3>
+        <div class="setting-item" style="margin-bottom:12px">
+            <div class="setting-label">本月成绩</div>
+            <input type="number" class="setting-input" id="editScore" value="${typeof emp.score === 'number' ? emp.score : ''}" placeholder="输入分数" min="0" max="100">
+        </div>
+        <div class="setting-item" style="margin-bottom:12px">
+            <div class="setting-label">状态</div>
+            <select class="setting-input" id="editStatus">
+                <option value="待答题" ${emp.status==='待答题'?'selected':''}>待答题</option>
+                <option value="已评分" ${emp.status==='已评分'?'selected':''}>已评分</option>
+                <option value="已达标" ${emp.status==='已达标'?'selected':''}>已达标</option>
+                <option value="未达标" ${emp.status==='未达标'?'selected':''}>未达标</option>
+                <option value="已推送培训" ${emp.status==='已推送培训'?'selected':''}>已推送培训</option>
+            </select>
+        </div>
+        <div class="modal-actions">
+            <button class="btn btn-outline" onclick="closeModal()">取消</button>
+            <button class="btn btn-primary" onclick="saveEmployee(${index})">保存</button>
+        </div>
+    `;
+    document.getElementById('modalOverlay').classList.add('show');
+}
+
+function saveEmployee(index) {
+    const score = document.getElementById('editScore').value;
+    const status = document.getElementById('editStatus').value;
+    employees[index].score = score ? parseInt(score) : '待答题';
+    employees[index].status = status;
+    saveState();
+    renderEmployees();
+    updateStats();
+    closeModal();
+    showToast('✅ 已更新: ' + employees[index].name);
+}
+
+function removeEmployee(index) {
+    if (!confirm('确定删除员工 ' + employees[index].name + ' 吗？')) return;
+    const name = employees[index].name;
+    employees.splice(index, 1);
+    saveState();
+    renderEmployees();
+    updateStats();
+    showToast('🗑 已删除: ' + name);
+    addLog('删除员工: ' + name, 'orange');
+}
+
+function refreshTasks() {
+    showToast('🔄 状态已刷新');
+    renderTasks();
+}
+
+function clearLogs() {
+    if (!confirm('确定清空所有操作记录吗？')) return;
+    logs = [];
+    saveState();
+    renderLogs();
+    showToast('🗑 日志已清空');
+}
+
+function exportConfig() {
+    const data = { settings, employees, logs, exportDate: new Date().toISOString() };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = '置换中枢配置_' + new Date().toISOString().slice(0,10) + '.json';
+    a.click();
+    showToast('📤 配置已导出');
+}
+
+function importConfig() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+            try {
+                const data = JSON.parse(ev.target.result);
+                if (data.settings) settings = { ...DEFAULT_SETTINGS, ...data.settings };
+                if (data.employees) employees = data.employees;
+                if (data.logs) logs = data.logs;
+                saveState();
+                renderSettings();
+                renderEmployees();
+                renderLogs();
+                updateStats();
+                showToast('📥 配置已导入');
+                addLog('导入了配置文件', 'blue');
+            } catch(err) {
+                showToast('⚠️ 文件格式错误');
+            }
+        };
+        reader.readAsText(file);
+    };
+    input.click();
+}
+
+function syncFeishu() {
+    showTriggerModal('同步飞书多维表格的题库和答题记录数据', '🔄 同步飞书数据');
+}
+
+function addLog(text, type) {
+    const now = new Date();
+    const time = (now.getMonth()+1).toString().padStart(2,'0') + '-' + now.getDate().toString().padStart(2,'0') + ' ' +
+        now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+    logs.unshift({ time, text, type: type || 'blue' });
+    if (logs.length > 50) logs = logs.slice(0, 50);
+    saveState();
+    renderLogs();
+}
+
+// ====== Utilities ======
+function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('show');
+}
+
+function copyText(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        showToast('📋 已复制到剪贴板');
+    }).catch(() => {
+        // Fallback
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast('📋 已复制到剪贴板');
+    });
+}
+
+function showToast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+// ====== Real-time Submissions ======
+let lastSubmissions = [];
+let livePollingInterval = null;
+let audioCtx = null;
+
+function playNotificationSound() {
+    try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(1100, audioCtx.currentTime + 0.1);
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+        osc.start(audioCtx.currentTime);
+        osc.stop(audioCtx.currentTime + 0.4);
+    } catch(e) { console.warn('Audio not available:', e); }
+}
+
+function showSubmissionToast(name, brand, score) {
+    const el = document.getElementById('toastNotification');
+    document.getElementById('toastNotifTitle').textContent = `🔔 ${name} 刚提交了 ${brand} 考试`;
+    document.getElementById('toastNotifBody').textContent = `得分 ${score} 分`;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 4000);
+}
+
+function renderSubmissions(submissions, newIndices) {
+    const el = document.getElementById('submissionList');
+    if (!submissions || submissions.length === 0) {
+        el.innerHTML = '<div class="live-empty"><div class="icon">📭</div><p>暂无答题记录</p></div>';
+        document.getElementById('liveCount').textContent = '0条记录';
+        return;
+    }
+    document.getElementById('liveCount').textContent = submissions.length + '条记录';
+    el.innerHTML = submissions.map((s, i) => {
+        const isNew = newIndices.includes(i);
+        const avatar = s.name ? s.name.charAt(0) : '?';
+        const scoreClass = s.is_pass === '是' ? 'pass' : 'fail';
+        const passClass = s.is_pass === '是' ? 'yes' : 'no';
+        const passText = s.is_pass === '是' ? '达标' : '未达标';
+        return `<div class="submission-item${isNew ? ' new-highlight' : ''}">
+            <div class="submission-left">
+                <div class="submission-avatar">${avatar}</div>
+                <div class="submission-info">
+                    <div class="submission-name">${s.name}</div>
+                    <div class="submission-brand">${s.brand || ''}${s.store ? ' · ' + s.store : ''}</div>
+                </div>
+            </div>
+            <div class="submission-right">
+                <div class="submission-score ${scoreClass}">${s.score}分</div>
+                <div class="submission-pass-badge ${passClass}">${passText}</div>
+                <div class="submission-time">${s.time || ''}</div>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+async function fetchSubmissions() {
+    try {
+        // Try local static data first, then API
+        let data;
+        try {
+            const staticResp = await fetch('../submissions.json');
+            if (staticResp.ok) {
+                data = await staticResp.json();
+            } else {
+                throw new Error('No static data');
+            }
+        } catch(e) {
+            // No static data available - show demo mode
+            document.getElementById('liveDot').className = 'dot offline';
+            document.getElementById('liveStatusText').textContent = '静态托管模式（无实时数据）';
+            return;
+        }
+        if (!data.ok) throw new Error(data.error || 'API error');
+
+        const submissions = data.submissions || [];
+        // Detect new submissions by comparing with previous data
+        const newIndices = [];
+        if (lastSubmissions.length > 0) {
+            const lastKeys = new Set(lastSubmissions.map(s => s.name + '|' + s.brand + '|' + s.time));
+            submissions.forEach((s, i) => {
+                const key = s.name + '|' + s.brand + '|' + s.time;
+                if (!lastKeys.has(key)) {
+                    newIndices.push(i);
+                }
+            });
+            // Show toast and play sound for each new submission
+            newIndices.forEach(i => {
+                const s = submissions[i];
+                if (s) {
+                    playNotificationSound();
+                    showSubmissionToast(s.name, s.brand, s.score);
+                }
+            });
+        }
+
+        lastSubmissions = submissions;
+        renderSubmissions(submissions, newIndices);
+
+        // Update live status
+        document.getElementById('liveDot').className = 'dot';
+        document.getElementById('liveStatusText').textContent = '自动刷新中（每10秒）';
+        const now = new Date();
+        document.getElementById('liveLastRefresh').textContent =
+            '最近刷新: ' + now.getHours().toString().padStart(2,'0') + ':' +
+            now.getMinutes().toString().padStart(2,'0') + ':' +
+            now.getSeconds().toString().padStart(2,'0');
+
+        // Update employee table from submissions
+        updateEmployeesFromSubmissions(submissions);
+
+        // Update stats
+        updateStatsFromSubmissions(submissions);
+
+    } catch(e) {
+        console.error('Fetch submissions error:', e);
+        document.getElementById('liveDot').className = 'dot error';
+        document.getElementById('liveStatusText').textContent = '连接断开';
+        document.getElementById('liveLastRefresh').textContent = '';
+    }
+}
+
+function updateEmployeesFromSubmissions(submissions) {
+    if (!submissions || submissions.length === 0) return;
+
+    // Merge submission data into employees
+    // Create a map of name -> latest submission
+    const latestByPerson = {};
+    submissions.forEach(s => {
+        const name = s.name;
+        if (!latestByPerson[name] || (s.time && s.time > (latestByPerson[name].time || ''))) {
+            latestByPerson[name] = s;
+        }
+    });
+
+    // Update existing employees or add new ones
+    Object.values(latestByPerson).forEach(s => {
+        const existingIdx = employees.findIndex(e => e.name === s.name);
+        if (existingIdx >= 0) {
+            // Update existing employee
+            employees[existingIdx].score = s.score;
+            if (s.is_pass === '是') {
+                employees[existingIdx].status = '已达标';
+            } else {
+                employees[existingIdx].status = '未达标';
+            }
+            employees[existingIdx].rounds = (employees[existingIdx].rounds || 0) + 0; // Don't increment, just keep
+        } else {
+            // Add new employee from submission
+            employees.push({
+                name: s.name,
+                score: s.score,
+                status: s.is_pass === '是' ? '已达标' : '未达标',
+                rounds: 1
+            });
+        }
+    });
+
+    saveState();
+    renderEmployees();
+}
+
+function updateStatsFromSubmissions(submissions) {
+    if (!submissions || submissions.length === 0) return;
+    // Count people who haven't submitted yet (from employee list)
+    const submittedNames = new Set(submissions.map(s => s.name));
+    const pending = employees.filter(e => !submittedNames.has(e.name) || e.status === '待答题').length;
+    document.getElementById('statPending').textContent = pending;
+}
+
+function startLivePolling() {
+    // Initial fetch
+    fetchSubmissions();
+    // Poll every 10 seconds
+    livePollingInterval = setInterval(fetchSubmissions, 10000);
+}
+
+// ====== Start ======
+init();
+startLivePolling();
+</script>
+
+</body>
+</html>

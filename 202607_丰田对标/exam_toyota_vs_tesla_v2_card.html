@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>7月品牌对标考核 - 丰田VS特斯拉</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', sans-serif; background: #f0f2f5; color: #333; line-height: 1.6; }
+.container { max-width: 800px; margin: 0 auto; padding: 20px; }
+.header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 16px; margin-bottom: 24px; text-align: center; }
+.header h1 { font-size: 22px; margin-bottom: 8px; }
+.header .meta { font-size: 14px; opacity: 0.9; }
+.info-bar { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+.info-tag { background: white; padding: 8px 16px; border-radius: 20px; font-size: 13px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.info-tag .label { color: #888; }
+.info-tag .value { color: #333; font-weight: 600; margin-left: 4px; }
+.form-section { background: white; border-radius: 12px; padding: 20px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+.form-section .section-title { font-size: 16px; font-weight: 600; color: #333; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #667eea; }
+.user-info { display: flex; gap: 12px; flex-wrap: wrap; }
+.user-info input { flex: 1; min-width: 200px; padding: 10px 14px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; outline: none; transition: border-color 0.2s; }
+.user-info input:focus { border-color: #667eea; }
+.question-card { background: white; border-radius: 12px; padding: 20px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); transition: all 0.2s; border-left: 4px solid transparent; }
+.question-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
+.question-card.answered { border-left-color: #52c41a; }
+.question-card.wrong { border-left-color: #ff4d4f; }
+.q-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.q-num { font-weight: 600; color: #667eea; }
+.q-type { font-size: 12px; padding: 2px 8px; border-radius: 10px; background: #f0f0f0; color: #666; }
+.q-type.单选 { background: #e6f7ff; color: #1890ff; }
+.q-type.多选 { background: #fff7e6; color: #fa8c16; }
+.q-type.置换场景 { background: #f9f0ff; color: #722ed1; }
+.q-type.对标场景 { background: #fff0f6; color: #eb2f96; }
+.q-type.场景应用 { background: #f9f0ff; color: #722ed1; }
+.q-score { font-size: 12px; color: #999; }
+.q-title { font-size: 15px; margin-bottom: 14px; line-height: 1.7; }
+.options { display: flex; flex-direction: column; gap: 8px; }
+.option-item { display: flex; align-items: center; padding: 10px 14px; border: 1px solid #e8e8e8; border-radius: 8px; cursor: pointer; transition: all 0.2s; user-select: none; }
+.option-item:hover { background: #f5f5f5; border-color: #667eea; }
+.option-item.selected { background: #f0f5ff; border-color: #667eea; color: #667eea; }
+.option-item.correct { background: #f6ffed; border-color: #52c41a; color: #52c41a; }
+.option-item.wrong-pick { background: #fff2f0; border-color: #ff4d4f; color: #ff4d4f; }
+.option-key { width: 24px; height: 24px; border-radius: 50%; border: 2px solid #d9d9d9; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; margin-right: 10px; flex-shrink: 0; }
+.option-item.selected .option-key { border-color: #667eea; background: #667eea; color: white; }
+.option-item.correct .option-key { border-color: #52c41a; background: #52c41a; color: white; }
+.option-item.wrong-pick .option-key { border-color: #ff4d4f; background: #ff4d4f; color: white; }
+.option-text { font-size: 14px; }
+.scenario-textarea { width: 100%; min-height: 120px; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; line-height: 1.6; resize: vertical; outline: none; font-family: inherit; }
+.scenario-textarea:focus { border-color: #667eea; }
+.submit-area { text-align: center; padding: 30px 0; }
+.submit-btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 14px 48px; border-radius: 30px; font-size: 16px; font-weight: 600; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+.submit-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(102,126,234,0.4); }
+.submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.progress-bar { position: sticky; top: 0; z-index: 100; background: white; padding: 12px 20px; border-radius: 0 0 12px 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.progress-track { flex: 1; height: 8px; background: #f0f0f0; border-radius: 4px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, #667eea, #764ba2); border-radius: 4px; transition: width 0.3s; }
+.progress-text { font-size: 13px; color: #666; white-space: nowrap; }
+.result-panel { display: none; background: white; border-radius: 16px; padding: 30px; margin: 20px 0; text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,0.1); }
+.result-score { font-size: 64px; font-weight: 700; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.result-label { font-size: 16px; color: #666; margin-top: 8px; }
+.result-status { display: inline-block; padding: 6px 20px; border-radius: 20px; font-size: 14px; font-weight: 600; margin-top: 12px; }
+.result-status.pass { background: #f6ffed; color: #52c41a; }
+.result-status.fail { background: #fff2f0; color: #ff4d4f; }
+.result-detail { display: flex; justify-content: center; gap: 24px; margin-top: 20px; flex-wrap: wrap; }
+.result-item { text-align: center; }
+.result-item .num { font-size: 24px; font-weight: 600; }
+.result-item .lbl { font-size: 12px; color: #999; }
+.analysis-box { margin-top: 12px; padding: 12px; background: #fafafa; border-radius: 8px; font-size: 13px; color: #666; display: none; line-height: 1.8; }
+.analysis-box .ans-label { color: #52c41a; font-weight: 600; }
+.analysis-box .your-label { color: #ff4d4f; font-weight: 600; }
+.submit-score-area { display: none; background: linear-gradient(135deg, #f6ffed 0%, #eaffda 100%); border: 2px dashed #52c41a; border-radius: 16px; padding: 24px; margin: 16px 0; text-align: center; }
+.submit-score-area .area-title { font-size: 16px; font-weight: 600; color: #333; margin-bottom: 6px; }
+.submit-score-area .area-desc { font-size: 13px; color: #666; margin-bottom: 16px; }
+.submit-score-btn { background: linear-gradient(135deg, #52c41a 0%, #389e0d 100%); color: white; border: none; padding: 14px 36px; border-radius: 30px; font-size: 16px; font-weight: 600; cursor: pointer; }
+.submit-score-hint { font-size: 12px; color: #888; margin-top: 10px; }
+.toast-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; justify-content: center; align-items: center; background: rgba(0,0,0,0.15); }
+.toast-overlay.show { display: flex; }
+.toast-box { background: white; border-radius: 16px; padding: 30px 24px; text-align: center; box-shadow: 0 8px 30px rgba(0,0,0,0.18); max-width: 340px; width: 90%; animation: toastIn 0.3s ease; }
+.toast-icon { font-size: 48px; margin-bottom: 12px; }
+.toast-title { font-size: 18px; font-weight: 600; color: #333; margin-bottom: 8px; }
+.toast-msg { font-size: 14px; color: #666; line-height: 1.6; }
+@keyframes toastIn { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
+.timer { font-size: 14px; font-weight: 600; color: #667eea; }
+@media (max-width: 600px) {
+  .container { padding: 12px; }
+  .header { padding: 20px; }
+  .header h1 { font-size: 18px; }
+  .user-info { flex-direction: column; }
+  .user-info input { min-width: auto; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>📋 7月品牌对标考核</h1>
+    <div class="meta">丰田VS特斯拉 | 置换评估师能力考核</div>
+  </div>
+  <div class="info-bar">
+    <div class="info-tag"><span class="label">满分</span><span class="value">100分</span></div>
+    <div class="info-tag"><span class="label">及格线</span><span class="value">80分</span></div>
+    <div class="info-tag"><span class="label">题目</span><span class="value">12题</span></div>
+    <div class="info-tag"><span class="label">时长</span><span class="value">30分钟</span></div>
+  </div>
+  <div class="progress-bar" id="progressBar">
+    <span class="timer" id="timer">⏱ 30:00</span>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <span class="progress-text" id="progressText">0/12</span>
+  </div>
+  <div class="form-section">
+    <div class="section-title">👤 基本信息</div>
+    <div class="user-info">
+      <input type="text" id="userName" placeholder="请输入姓名" required>
+      <input type="text" id="userStore" placeholder="请输入门店" required>
+    </div>
+  </div>
+  <div id="questionsArea"></div>
+  <div class="result-panel" id="resultPanel">
+    <div class="result-score" id="resultScore">0</div>
+    <div class="result-label">客观题得分（满分50分）</div>
+    <div class="result-status" id="resultStatus"></div>
+    <div class="result-detail">
+      <div class="result-item"><div class="num" id="rCorrect" style="color:#52c41a">0</div><div class="lbl">正确</div></div>
+      <div class="result-item"><div class="num" id="rWrong" style="color:#ff4d4f">0</div><div class="lbl">错误</div></div>
+      <div class="result-item"><div class="num" id="rUnscored" style="color:#faad14">2</div><div class="lbl">场景题待评分</div></div>
+    </div>
+    <div style="margin-top:14px;padding:10px 14px;background:#fffbe6;border-radius:8px;font-size:13px;color:#8c6e00;line-height:1.6;">
+      📝 场景题（2道，共50分）需由管理员人工评分，最终成绩以管理员录入为准。
+    </div>
+  </div>
+  <div class="submit-score-area" id="submitScoreArea">
+    <div class="area-title">📤 提交成绩到系统</div>
+    <div class="area-desc">点击下方按钮，成绩数据将自动填入飞书表单，您只需点击"提交"即可</div>
+    <button class="submit-score-btn" onclick="submitScore()">📤 一键提交成绩</button>
+    <div class="submit-score-hint">点击后打开飞书表单（数据已预填）→ 点击提交即完成</div>
+  </div>
+  <div class="toast-overlay" id="toastOverlay">
+    <div class="toast-box">
+      <div class="toast-icon">✅</div>
+      <div class="toast-title">已打开成绩登记表单！</div>
+      <div class="toast-msg">所有数据已自动填入<br>您只需点击"提交"按钮即可</div>
+    </div>
+  </div>
+  <div class="submit-area">
+    <button class="submit-btn" id="submitBtn" onclick="submitExam()">提交答卷</button>
+  </div>
+</div>
+<script>
+const EXAM_DATA = [{"num": 1, "title": "2026款丰田bZ3的官方指导价区间是（）", "options": [{"key": "A", "text": "9.38-12.98万"}, {"key": "B", "text": "10.98-14.98万"}, {"key": "C", "text": "12.98-16.98万"}, {"key": "D", "text": "15.98-19.98万"}], "score": 4, "type": "单选", "answer": "B", "analysis": "2026款丰田bZ3官方指导价10.98万-14.98万元，限时优惠版（智享家）低至9.38万起。", "category": ""}, {"num": 2, "title": "特斯拉Model 3 2026焕新版后驱版的CLTC续航是（）", "options": [{"key": "A", "text": "556km"}, {"key": "B", "text": "606km"}, {"key": "C", "text": "634km"}, {"key": "D", "text": "830km"}], "score": 4, "type": "单选", "answer": "C", "analysis": "2026款Model 3焕新版后驱版CLTC续航为634km，长续航后驱版为830km。", "category": ""}, {"num": 3, "title": "特斯拉中国内地已建成并开放的超充桩数量约为（）", "options": [{"key": "A", "text": "5,000根"}, {"key": "B", "text": "8,000根"}, {"key": "C", "text": "13,000根"}, {"key": "D", "text": "20,000根"}], "score": 4, "type": "单选", "answer": "C", "analysis": "截至2026年Q2，特斯拉在中国内地建成并开放超13,000根超充桩，全球超80,000根。", "category": ""}, {"num": 4, "title": "丰田铂智品牌2026上半年销量约为（）", "options": [{"key": "A", "text": "3.2万台"}, {"key": "B", "text": "4.2万台"}, {"key": "C", "text": "5.2万台"}, {"key": "D", "text": "6.2万台"}], "score": 4, "type": "单选", "answer": "C", "analysis": "铂智品牌上半年销量达到52,202台，其中铂智3X是销量主力。", "category": ""}, {"num": 5, "title": "特斯拉超充网络的实时可用率约为（）", "options": [{"key": "A", "text": "95%"}, {"key": "B", "text": "97%"}, {"key": "C", "text": "99.95%"}, {"key": "D", "text": "100%"}], "score": 4, "type": "单选", "answer": "C", "analysis": "特斯拉超充网络实时可用率保持99.95%的行业领先水平。", "category": ""}, {"num": 6, "title": "以下哪些是特斯拉相对于丰田纯电的核心竞争优势？（多选）", "options": [{"key": "A", "text": "OTA持续升级能力"}, {"key": "B", "text": "超充网络覆盖广泛"}, {"key": "C", "text": "品牌保值率更高"}, {"key": "D", "text": "底盘调校更舒适"}, {"key": "E", "text": "自动驾驶技术领先"}], "score": 6, "type": "多选", "answer": "ABCE", "analysis": "特斯拉在OTA升级、超充网络、保值率、自动驾驶技术方面优势明显。底盘舒适性方面丰田有一定优势。", "category": ""}, {"num": 7, "title": "丰田铂智3X的真实车主反馈中，常见问题包括（多选）", "options": [{"key": "A", "text": "座椅舒适性不足"}, {"key": "B", "text": "冬季续航缩水严重"}, {"key": "C", "text": "充电速度太慢"}, {"key": "D", "text": "NVH与滤震一般"}, {"key": "E", "text": "车机无法使用"}], "score": 6, "type": "多选", "answer": "ABD", "analysis": "铂智3X车主反馈：座椅舒适性不足、冬季续航达成率不足50%、NVH和滤震一般。充电速度24分钟还算可以（C不选），车机搭载8155芯片可用（E不选）。", "category": ""}, {"num": 8, "title": "丰田在华新能源销量低迷的主要原因包括（多选）", "options": [{"key": "A", "text": "HEV油混只能上蓝牌，无法享受新能源政策"}, {"key": "B", "text": "智能化体验落后，车机卡顿"}, {"key": "C", "text": "纯电产品充电速度慢（bZ4X）"}, {"key": "D", "text": "品牌溢价在新能源时代消退"}, {"key": "E", "text": "售后服务网点不足"}], "score": 6, "type": "多选", "answer": "ABCD", "analysis": "丰田新能源困境：HEV无法上绿牌、智能化落后、bZ4X充电慢口碑差、品牌溢价消退。丰田售后网点覆盖面实际上较广，E不选。", "category": ""}, {"num": 9, "title": "特斯拉Model 3焕新版相比老款的主要升级包括（多选）", "options": [{"key": "A", "text": "全系双层夹胶隔音玻璃"}, {"key": "B", "text": "续航从556km提升到634km"}, {"key": "C", "text": "长续航版降价近3万"}, {"key": "D", "text": "新增增程器选项"}, {"key": "E", "text": "内饰材质全面升级（Alcantara车顶+256色氛围灯）"}], "score": 6, "type": "多选", "answer": "ABCE", "analysis": "Model 3焕新版升级了隔音、续航、降价、内饰。特斯拉没有增程器，D错误。", "category": ""}, {"num": 10, "title": "评估师在接待丰田燃油车置换客户时，应重点关注哪些信息？（多选）", "options": [{"key": "A", "text": "客户原车车况及残值估算"}, {"key": "B", "text": "客户日常用车场景和里程"}, {"key": "C", "text": "客户的星座和血型"}, {"key": "D", "text": "客户是否有充电条件"}, {"key": "E", "text": "客户对智能化的需求程度"}], "score": 6, "type": "多选", "answer": "ABDE", "analysis": "评估师需全面了解车况、使用场景、充电条件和智能化需求。星座和血型与购车决策无关，C不选。", "category": ""}, {"num": 11, "title": "一位丰田凯美瑞（2020款2.5G豪华版）车主要置换新能源车。客户每天通勤40km，家里有一个5岁的孩子，周末经常带家人出游。客户有地下车位可装充电桩，但对纯电续航有顾虑，且习惯了丰田的省油耐用。请分析客户需求，推荐合适的特斯拉车型，制定完整置换方案（含旧车残值估算、用车成本对比、金融方案建议），并说明如何打消续航顾虑。", "options": [], "score": 25, "type": "置换场景", "answer": "", "analysis": "评分要点：1）推荐Model Y（家用SUV，空间大，适合家庭）或Model 3（预算有限）；2）凯美瑞2020款残值约13-16万；3）年油费约1.1万vs年电费约2,400元，年省8,600元；4）Model 3续航634km/Model Y续航593km，满足日常+周末出游；5）有家充桩可解决日常补能，超充网络解决长途焦虑；6）5年0利息金融方案降低门槛。", "category": ""}, {"num": 12, "title": "一位丰田铂智3X车主开了半年，对冬季续航缩水和座椅舒适性非常不满，看到特斯拉的宣传想置换。但同时又担心特斯拉售后不如丰田4S店网点多，而且不确定保值率会不会也有问题。请设计一套完整的应对话术，既要突出特斯拉的优势，也要打消客户对售后和保值率的顾虑，并给出具体置换方案建议。", "options": [], "score": 25, "type": "对标场景", "answer": "", "analysis": "评分要点：1）认可客户痛点（冬季续航缩水、座椅舒适性）确实存在；2）Model 3续航634km vs 铂智3X的430-610km，长续航版830km更不用担心冬季缩水；3）售后方面：特斯拉中国服务网点持续扩张，超充站覆盖广，支持上门服务和移动服务车；4）保值率对比：特斯拉Model 3三年68.2% vs 丰田纯电保值率不确定；5）铂智3X残值约7-8万，趁还有残值尽早置换；6）给出具体金融方案和补差价方案。", "category": ""}];
+let answers = {};
+let startTime = Date.now();
+let timerInterval;
+const EXAM_MINUTES = 30;
+
+function init() { renderQuestions(); }
+
+function renderQuestions() {
+  const area = document.getElementById('questionsArea');
+  let html = '';
+  let currentType = '';
+  const sectionIcons = { '单选': '📝 单选题', '多选': '📝 多选题', '置换场景': '🎯 置换场景题', '对标场景': '🔍 对标场景题', '场景应用': '📝 场景应用题' };
+
+  EXAM_DATA.forEach(q => {
+    if (q.type !== currentType) {
+      if (currentType) html += '</div>';
+      currentType = q.type;
+      html += `<div class="form-section"><div class="section-title">${sectionIcons[currentType] || '📝 ' + currentType}</div>`;
+    }
+    html += `<div class="question-card" id="qcard-${q.num}">`;
+    html += `<div class="q-header"><span class="q-num">第${q.num}题</span><span class="q-type ${q.type}">${q.type}</span><span class="q-score">${q.score}分</span></div>`;
+    html += `<div class="q-title">${q.title}</div>`;
+    if (q.type === '置换场景' || q.type === '对标场景' || q.type === '场景应用') {
+      html += `<textarea class="scenario-textarea" id="scenario-${q.num}" placeholder="请在此作答..." oninput="onAnswer(${q.num}, this.value)"></textarea>`;
+    } else {
+      html += `<div class="options">`;
+      q.options.forEach(opt => {
+        const handler = q.type === '多选'
+          ? `selectOption(${q.num}, '${opt.key}', '多选')`
+          : `selectOption(${q.num}, '${opt.key}', '${q.type}')`;
+        html += `<div class="option-item" id="opt-${q.num}-${opt.key}" onclick="${handler}"><div class="option-key">${opt.key}</div><div class="option-text">${opt.text}</div></div>`;
+      });
+      html += `</div>`;
+    }
+    html += `<div class="analysis-box" id="analysis-${q.num}"></div></div>`;
+  });
+  if (currentType) html += '</div>';
+  area.innerHTML = html;
+  startTimer();
+}
+
+function selectOption(qNum, key, type) {
+  const q = EXAM_DATA.find(x => x.num === qNum);
+  if (type === '多选') {
+    if (!answers[qNum]) answers[qNum] = [];
+    const idx = answers[qNum].indexOf(key);
+    if (idx > -1) { answers[qNum].splice(idx, 1); document.getElementById(`opt-${qNum}-${key}`).classList.remove('selected'); }
+    else { answers[qNum].push(key); document.getElementById(`opt-${qNum}-${key}`).classList.add('selected'); }
+    if (answers[qNum].length === 0) delete answers[qNum];
+  } else {
+    q.options.forEach(opt => { document.getElementById(`opt-${qNum}-${opt.key}`).classList.remove('selected'); });
+    document.getElementById(`opt-${qNum}-${key}`).classList.add('selected');
+    answers[qNum] = key;
+  }
+  updateProgress();
+}
+
+function onAnswer(qNum, value) {
+  if (value.trim()) answers[qNum] = value.trim();
+  else delete answers[qNum];
+  updateProgress();
+}
+
+function updateProgress() {
+  const total = EXAM_DATA.length;
+  const answered = Object.keys(answers).length;
+  document.getElementById('progressFill').style.width = (answered / total * 100) + '%';
+  document.getElementById('progressText').textContent = `${answered}/${total}`;
+}
+
+function startTimer() {
+  const totalSec = EXAM_MINUTES * 60;
+  timerInterval = setInterval(() => {
+    const elapsed = Math.floor((Date.now() - startTime) / 1000);
+    const remain = Math.max(0, totalSec - elapsed);
+    const min = Math.floor(remain / 60);
+    const sec = remain % 60;
+    document.getElementById('timer').textContent = `⏱ ${min}:${sec.toString().padStart(2, '0')}`;
+    if (remain === 0) { clearInterval(timerInterval); submitExam(); }
+  }, 1000);
+}
+
+function submitExam() {
+  const name = document.getElementById('userName').value.trim();
+  const store = document.getElementById('userStore').value.trim();
+  if (!name || !store) { alert('请填写姓名和门店！'); return; }
+  const answered = Object.keys(answers).length;
+  if (answered < EXAM_DATA.length) {
+    if (!confirm(`你还有${EXAM_DATA.length - answered}题未作答，确定提交吗？`)) return;
+  }
+  clearInterval(timerInterval);
+  let totalScore = 0, correct = 0, wrong = 0, unscored = 0;
+  const wrongDetails = [];
+  EXAM_DATA.forEach(q => {
+    const card = document.getElementById(`qcard-${q.num}`);
+    const analysisBox = document.getElementById(`analysis-${q.num}`);
+    const userAns = answers[q.num];
+    if (['置换场景','对标场景','场景应用'].includes(q.type)) {
+      unscored++;
+      if (userAns) { analysisBox.innerHTML = '<div>⏳ 此题为人工评分题，将由管理员在3个工作日内评分。</div>'; analysisBox.style.display = 'block'; }
+      return;
+    }
+    let isCorrect = false;
+    if (q.type === '多选') {
+      const userArr = Array.isArray(userAns) ? [...userAns].sort() : [];
+      const correctArr = q.answer.split('').sort();
+      isCorrect = JSON.stringify(userArr) === JSON.stringify(correctArr);
+    } else { isCorrect = userAns === q.answer; }
+    if (isCorrect) {
+      correct++; totalScore += q.score; card.classList.add('answered');
+      if (q.type === '判断') document.getElementById(`opt-${q.num}-${q.answer}`).classList.add('correct');
+      else q.answer.split('').forEach(k => { const el = document.getElementById(`opt-${q.num}-${k}`); if(el) el.classList.add('correct'); });
+    } else {
+      wrong++;
+      wrongDetails.push({ num: q.num, answer: q.answer, userAns: Array.isArray(userAns) ? userAns.join('') : (userAns || '未答') });
+      card.classList.add('wrong');
+      if (Array.isArray(userAns)) userAns.forEach(k => { const el = document.getElementById(`opt-${q.num}-${k}`); if(el && !el.classList.contains('correct')) el.classList.add('wrong-pick'); });
+      else if (userAns) { const el = document.getElementById(`opt-${q.num}-${userAns}`); if(el) el.classList.add('wrong-pick'); }
+      if (q.type === '判断') document.getElementById(`opt-${q.num}-${q.answer}`).classList.add('correct');
+      else q.answer.split('').forEach(k => { const el = document.getElementById(`opt-${q.num}-${k}`); if(el && !el.classList.contains('wrong-pick')) el.classList.add('correct'); });
+    }
+    analysisBox.innerHTML = `<div><span class="ans-label">正确答案：</span>${q.answer}</div>` +
+      (userAns ? `<div><span class="your-label">你的答案：</span>${Array.isArray(userAns) ? userAns.join('') : userAns}</div>` : '') +
+      (q.analysis ? `<div style="margin-top:6px;color:#333">💡 ${q.analysis}</div>` : '');
+    analysisBox.style.display = 'block';
+  });
+  const panel = document.getElementById('resultPanel');
+  panel.style.display = 'block';
+  document.getElementById('resultScore').textContent = totalScore;
+  document.getElementById('rCorrect').textContent = correct;
+  document.getElementById('rWrong').textContent = wrong;
+  document.getElementById('rUnscored').textContent = unscored;
+  const status = document.getElementById('resultStatus');
+  if (totalScore >= 40.0) { status.textContent = '✅ 客观题达标'; status.className = 'result-status pass'; }
+  else { status.textContent = '❌ 客观题未达标，请继续学习'; status.className = 'result-status fail'; }
+  panel.scrollIntoView({ behavior: 'smooth' });
+  document.getElementById('submitBtn').disabled = true;
+  document.getElementById('submitBtn').textContent = '已提交';
+  document.getElementById('submitScoreArea').style.display = 'block';
+  window._examResult = { name, store, score: totalScore, correct, wrong, unscored, pass: totalScore >= 40.0, wrongDetails };
+}
+
+function submitScore() {
+  const r = window._examResult;
+  if (!r) return;
+  const now = new Date();
+  const pad = n => n.toString().padStart(2, '0');
+  const dateStr = `${now.getFullYear()}/${pad(now.getMonth()+1)}/${pad(now.getDate())}`;
+  const timeStr = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+  const passStr = r.pass ? '是' : '否';
+  let wrongText = '';
+  if (r.wrongDetails && r.wrongDetails.length > 0)
+    wrongText = r.wrongDetails.map(w => `第${w.num}题: 正确答案${w.answer}，你的答案${w.userAns}`).join('；');
+  else wrongText = '无';
+  const weakPoints = r.wrong > 0 ? `共答错${r.wrong}道客观题，需加强复习` : '全部正确';
+  const baseUrl = 'https://lcnqe6c8w8pi.feishu.cn/share/base/shrcn6DY8tokL1EtbYGmEt3pxlh';
+  const params = new URLSearchParams();
+  params.set('prefill_员工姓名', r.name);
+  params.set('prefill_考试日期', dateStr);
+  params.set('prefill_考试轮次', '第1轮');
+  params.set('prefill_总分', r.score.toString());
+  params.set('prefill_是否达标', passStr);
+  params.set('prefill_状态', '已评分');
+  params.set('prefill_错题详情', wrongText);
+  params.set('prefill_薄弱知识点', weakPoints);
+  params.set('prefill_考核月份', '7月');
+  params.set('prefill_品牌组合', '丰田VS特斯拉');
+  params.set('prefill_客观题得分', r.score.toString());
+  params.set('prefill_场景题得分', '0');
+  params.set('prefill_答题提交时间', `${dateStr} ${timeStr}`);
+  ['员工姓名','考试日期','考试轮次','总分','是否达标','状态','错题详情','薄弱知识点','考核月份','品牌组合','客观题得分','场景题得分','答题提交时间'].forEach(f => params.set('hide_' + f, '1'));
+  window.open(`${baseUrl}?${params.toString()}`, '_blank');
+  document.getElementById('toastOverlay').classList.add('show');
+  const btn = document.querySelector('.submit-score-btn');
+  btn.textContent = '✅ 已打开表单，点击提交即可';
+  setTimeout(() => document.getElementById('toastOverlay').classList.remove('show'), 3000);
+}
+
+init();
+</script>
+</body>
+</html>

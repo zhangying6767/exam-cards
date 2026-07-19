@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>7月品牌对标考核 - 奥迪VS特斯拉</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', sans-serif; background: #f0f2f5; color: #333; line-height: 1.6; }
+.container { max-width: 800px; margin: 0 auto; padding: 20px; }
+.header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 16px; margin-bottom: 24px; text-align: center; }
+.header h1 { font-size: 22px; margin-bottom: 8px; }
+.header .meta { font-size: 14px; opacity: 0.9; }
+.info-bar { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+.info-tag { background: white; padding: 8px 16px; border-radius: 20px; font-size: 13px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.info-tag .label { color: #888; }
+.info-tag .value { color: #333; font-weight: 600; margin-left: 4px; }
+.form-section { background: white; border-radius: 12px; padding: 20px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+.form-section .section-title { font-size: 16px; font-weight: 600; color: #333; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #667eea; }
+.user-info { display: flex; gap: 12px; flex-wrap: wrap; }
+.user-info input { flex: 1; min-width: 200px; padding: 10px 14px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; outline: none; transition: border-color 0.2s; }
+.user-info input:focus { border-color: #667eea; }
+.question-card { background: white; border-radius: 12px; padding: 20px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); transition: all 0.2s; border-left: 4px solid transparent; }
+.question-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
+.question-card.answered { border-left-color: #52c41a; }
+.question-card.wrong { border-left-color: #ff4d4f; }
+.q-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.q-num { font-weight: 600; color: #667eea; }
+.q-type { font-size: 12px; padding: 2px 8px; border-radius: 10px; background: #f0f0f0; color: #666; }
+.q-type.单选 { background: #e6f7ff; color: #1890ff; }
+.q-type.多选 { background: #fff7e6; color: #fa8c16; }
+.q-type.置换场景 { background: #f9f0ff; color: #722ed1; }
+.q-type.对标场景 { background: #fff0f6; color: #eb2f96; }
+.q-type.场景应用 { background: #f9f0ff; color: #722ed1; }
+.q-score { font-size: 12px; color: #999; }
+.q-title { font-size: 15px; margin-bottom: 14px; line-height: 1.7; }
+.options { display: flex; flex-direction: column; gap: 8px; }
+.option-item { display: flex; align-items: center; padding: 10px 14px; border: 1px solid #e8e8e8; border-radius: 8px; cursor: pointer; transition: all 0.2s; user-select: none; }
+.option-item:hover { background: #f5f5f5; border-color: #667eea; }
+.option-item.selected { background: #f0f5ff; border-color: #667eea; color: #667eea; }
+.option-item.correct { background: #f6ffed; border-color: #52c41a; color: #52c41a; }
+.option-item.wrong-pick { background: #fff2f0; border-color: #ff4d4f; color: #ff4d4f; }
+.option-key { width: 24px; height: 24px; border-radius: 50%; border: 2px solid #d9d9d9; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; margin-right: 10px; flex-shrink: 0; }
+.option-item.selected .option-key { border-color: #667eea; background: #667eea; color: white; }
+.option-item.correct .option-key { border-color: #52c41a; background: #52c41a; color: white; }
+.option-item.wrong-pick .option-key { border-color: #ff4d4f; background: #ff4d4f; color: white; }
+.option-text { font-size: 14px; }
+.scenario-textarea { width: 100%; min-height: 120px; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; line-height: 1.6; resize: vertical; outline: none; font-family: inherit; }
+.scenario-textarea:focus { border-color: #667eea; }
+.submit-area { text-align: center; padding: 30px 0; }
+.submit-btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 14px 48px; border-radius: 30px; font-size: 16px; font-weight: 600; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+.submit-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(102,126,234,0.4); }
+.submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.progress-bar { position: sticky; top: 0; z-index: 100; background: white; padding: 12px 20px; border-radius: 0 0 12px 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.progress-track { flex: 1; height: 8px; background: #f0f0f0; border-radius: 4px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, #667eea, #764ba2); border-radius: 4px; transition: width 0.3s; }
+.progress-text { font-size: 13px; color: #666; white-space: nowrap; }
+.result-panel { display: none; background: white; border-radius: 16px; padding: 30px; margin: 20px 0; text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,0.1); }
+.result-score { font-size: 64px; font-weight: 700; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.result-label { font-size: 16px; color: #666; margin-top: 8px; }
+.result-status { display: inline-block; padding: 6px 20px; border-radius: 20px; font-size: 14px; font-weight: 600; margin-top: 12px; }
+.result-status.pass { background: #f6ffed; color: #52c41a; }
+.result-status.fail { background: #fff2f0; color: #ff4d4f; }
+.result-detail { display: flex; justify-content: center; gap: 24px; margin-top: 20px; flex-wrap: wrap; }
+.result-item { text-align: center; }
+.result-item .num { font-size: 24px; font-weight: 600; }
+.result-item .lbl { font-size: 12px; color: #999; }
+.analysis-box { margin-top: 12px; padding: 12px; background: #fafafa; border-radius: 8px; font-size: 13px; color: #666; display: none; line-height: 1.8; }
+.analysis-box .ans-label { color: #52c41a; font-weight: 600; }
+.analysis-box .your-label { color: #ff4d4f; font-weight: 600; }
+.submit-score-area { display: none; background: linear-gradient(135deg, #f6ffed 0%, #eaffda 100%); border: 2px dashed #52c41a; border-radius: 16px; padding: 24px; margin: 16px 0; text-align: center; }
+.submit-score-area .area-title { font-size: 16px; font-weight: 600; color: #333; margin-bottom: 6px; }
+.submit-score-area .area-desc { font-size: 13px; color: #666; margin-bottom: 16px; }
+.submit-score-btn { background: linear-gradient(135deg, #52c41a 0%, #389e0d 100%); color: white; border: none; padding: 14px 36px; border-radius: 30px; font-size: 16px; font-weight: 600; cursor: pointer; }
+.submit-score-hint { font-size: 12px; color: #888; margin-top: 10px; }
+.toast-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; justify-content: center; align-items: center; background: rgba(0,0,0,0.15); }
+.toast-overlay.show { display: flex; }
+.toast-box { background: white; border-radius: 16px; padding: 30px 24px; text-align: center; box-shadow: 0 8px 30px rgba(0,0,0,0.18); max-width: 340px; width: 90%; animation: toastIn 0.3s ease; }
+.toast-icon { font-size: 48px; margin-bottom: 12px; }
+.toast-title { font-size: 18px; font-weight: 600; color: #333; margin-bottom: 8px; }
+.toast-msg { font-size: 14px; color: #666; line-height: 1.6; }
+@keyframes toastIn { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
+.timer { font-size: 14px; font-weight: 600; color: #667eea; }
+@media (max-width: 600px) {
+  .container { padding: 12px; }
+  .header { padding: 20px; }
+  .header h1 { font-size: 18px; }
+  .user-info { flex-direction: column; }
+  .user-info input { min-width: auto; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>📋 7月品牌对标考核</h1>
+    <div class="meta">奥迪VS特斯拉 | 置换评估师能力考核</div>
+  </div>
+  <div class="info-bar">
+    <div class="info-tag"><span class="label">满分</span><span class="value">100分</span></div>
+    <div class="info-tag"><span class="label">及格线</span><span class="value">80分</span></div>
+    <div class="info-tag"><span class="label">题目</span><span class="value">12题</span></div>
+    <div class="info-tag"><span class="label">时长</span><span class="value">30分钟</span></div>
+  </div>
+  <div class="progress-bar" id="progressBar">
+    <span class="timer" id="timer">⏱ 30:00</span>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <span class="progress-text" id="progressText">0/12</span>
+  </div>
+  <div class="form-section">
+    <div class="section-title">👤 基本信息</div>
+    <div class="user-info">
+      <input type="text" id="userName" placeholder="请输入姓名" required>
+      <input type="text" id="userStore" placeholder="请输入门店" required>
+    </div>
+  </div>
+  <div id="questionsArea"></div>
+  <div class="result-panel" id="resultPanel">
+    <div class="result-score" id="resultScore">0</div>
+    <div class="result-label">客观题得分（满分50分）</div>
+    <div class="result-status" id="resultStatus"></div>
+    <div class="result-detail">
+      <div class="result-item"><div class="num" id="rCorrect" style="color:#52c41a">0</div><div class="lbl">正确</div></div>
+      <div class="result-item"><div class="num" id="rWrong" style="color:#ff4d4f">0</div><div class="lbl">错误</div></div>
+      <div class="result-item"><div class="num" id="rUnscored" style="color:#faad14">2</div><div class="lbl">场景题待评分</div></div>
+    </div>
+    <div style="margin-top:14px;padding:10px 14px;background:#fffbe6;border-radius:8px;font-size:13px;color:#8c6e00;line-height:1.6;">
+      📝 场景题（2道，共50分）需由管理员人工评分，最终成绩以管理员录入为准。
+    </div>
+  </div>
+  <div class="submit-score-area" id="submitScoreArea">
+    <div class="area-title">📤 提交成绩到系统</div>
+    <div class="area-desc">点击下方按钮，成绩数据将自动填入飞书表单，您只需点击"提交"即可</div>
+    <button class="submit-score-btn" onclick="submitScore()">📤 一键提交成绩</button>
+    <div class="submit-score-hint">点击后打开飞书表单（数据已预填）→ 点击提交即完成</div>
+  </div>
+  <div class="toast-overlay" id="toastOverlay">
+    <div class="toast-box">
+      <div class="toast-icon">✅</div>
+      <div class="toast-title">已打开成绩登记表单！</div>
+      <div class="toast-msg">所有数据已自动填入<br>您只需点击"提交"按钮即可</div>
+    </div>
+  </div>
+  <div class="submit-area">
+    <button class="submit-btn" id="submitBtn" onclick="submitExam()">提交答卷</button>
+  </div>
+</div>
+<script>
+const EXAM_DATA = [{"num": 1, "title": "2026年5月，奥迪A6L的官方指导价区间是（）", "options": [{"key": "A", "text": "28.98-36.28万"}, {"key": "B", "text": "33.69-55.89万"}, {"key": "C", "text": "30.98-39.98万"}, {"key": "D", "text": "25.58-34.68万"}], "score": 4, "type": "单选", "answer": "B", "analysis": "奥迪A6L官方指导价33.69-55.89万。A4L是28.98-36.28万，Q5L是30.98-39.98万，A5L是25.58-34.68万。", "category": "奥迪车型参数"}, {"num": 2, "title": "奥迪A6L终端最大优惠幅度达到（），入门裸车价下探至27万上下", "options": [{"key": "A", "text": "10万"}, {"key": "B", "text": "15万"}, {"key": "C", "text": "20万"}, {"key": "D", "text": "25万"}], "score": 4, "type": "单选", "answer": "C", "analysis": "奥迪A6L终端优惠普遍突破16万，部分城市降幅达20万，创20年历史最低价。", "category": "奥迪降价"}, {"num": 3, "title": "奥迪Q5L 2026年5月销量同比变化为（）", "options": [{"key": "A", "text": "-16.57%"}, {"key": "B", "text": "-25.41%"}, {"key": "C", "text": "-32.8%"}, {"key": "D", "text": "-62.11%"}], "score": 4, "type": "单选", "answer": "B", "analysis": "Q5L 5月销量6,272辆，同比-25.41%。A6L同比-16.57%，A4L同比-62.11%。", "category": "奥迪市场数据"}, {"num": 4, "title": "奥迪A4L目前处于产品生命周期末端，正在被哪款车型替代？（）", "options": [{"key": "A", "text": "A3"}, {"key": "B", "text": "A5L"}, {"key": "C", "text": "A6L"}, {"key": "D", "text": "A7L"}], "score": 4, "type": "单选", "answer": "B", "analysis": "A4L正被A5L替代，A5L是PPC豪华燃油智能平台首款车，搭载华为乾崑智驾。", "category": "奥迪车型"}, {"num": 5, "title": "新款奥迪A6L/Q5L搭载了哪个品牌的智能驾驶系统？（）", "options": [{"key": "A", "text": "百度Apollo"}, {"key": "B", "text": "华为乾崑"}, {"key": "C", "text": "小鹏XNGP"}, {"key": "D", "text": "Mobileye"}], "score": 4, "type": "单选", "answer": "B", "analysis": "新款A6L和Q5L搭载华为乾崑智驾系统，支持城区NOA、高速NOA、跨层记忆泊车。", "category": "奥迪智能化"}, {"num": 6, "title": "以下哪些是奥迪Q5L新款车主反馈的高频品控问题？（多选）", "options": [{"key": "A", "text": "变速箱故障，需拆变速箱大修"}, {"key": "B", "text": "提车当天全车断电"}, {"key": "C", "text": "螺栓松动报警"}, {"key": "D", "text": "刹车后再加油门后备箱处咚响"}], "score": 6, "type": "多选", "answer": "ABCD", "analysis": "以上四项均为新款Q5L车主真实反馈的品控问题，反映出装配工艺和质量控制存在隐患。", "category": "奥迪品控"}, {"num": 7, "title": "以下哪些属于奥迪车主反馈的MMI车机系统痛点？（多选）", "options": [{"key": "A", "text": "冷启动需十几秒加载"}, {"key": "B", "text": "导航偶发黑屏重启"}, {"key": "C", "text": "语音识别方言不支持"}, {"key": "D", "text": "CarPlay每次需重新配对"}], "score": 6, "type": "多选", "answer": "ABCD", "analysis": "四项均为奥迪MMI车机系统常见投诉，反映出传统豪华品牌在车机体验上与新势力的代差。", "category": "奥迪智能化"}, {"num": 8, "title": "特斯拉FSD进入中国市场需要满足的条件包括（多选）", "options": [{"key": "A", "text": "数据本地存储，不出境"}, {"key": "B", "text": "搭载HW4.0硬件"}, {"key": "C", "text": "获得多部委监管审批"}, {"key": "D", "text": "与本地图商合作地图测绘"}], "score": 6, "type": "多选", "answer": "ABCD", "analysis": "FSD入华需满足数据合规（上海数据中心+临港AI训练中心）、HW4.0硬件门槛、监管审批、本地地图合作等多重条件。", "category": "特斯拉智能化"}, {"num": 9, "title": "奥迪相比特斯拉，在5年TCO（总拥有成本）上劣势体现在哪些方面？（多选）", "options": [{"key": "A", "text": "年油费1-1.5万 vs 电费0.2-0.3万"}, {"key": "B", "text": "年保养费5,000-10,000元 vs 约1,500元"}, {"key": "C", "text": "三年保值率低15-20个百分点"}, {"key": "D", "text": "保险费用更高"}], "score": 6, "type": "多选", "answer": "ABC", "analysis": "ABC是奥迪的主要TCO劣势。保险方面特斯拉与奥迪差距不大，部分车型特斯拉保险甚至更低。", "category": "TCO对比"}, {"num": 10, "title": "以下关于特斯拉2026年Q2业绩描述正确的有（多选）", "options": [{"key": "A", "text": "全球交付48.01万辆，同比+25%"}, {"key": "B", "text": "储能产品装机13.5GWh，同比+41%"}, {"key": "C", "text": "Model S/X正式停产"}, {"key": "D", "text": "股价在交付数据公布后大涨"}], "score": 6, "type": "多选", "answer": "ABC", "analysis": "ABC正确。D错误——尽管交付超预期，股价当日大跌7.49%，因市场提前消化利好+利润率担忧。", "category": "特斯拉数据"}, {"num": 11, "title": "场景题：一位奥迪A6L车主来到特斯拉门店，说'我的A6L开了5年，当时落地52万，现在二手车商只给18万，亏太多了，不想换'。请设计一套完整的应对话术，包含共情、数据说服和成交引导三个环节。", "options": [], "score": 25, "type": "置换场景", "answer": "", "analysis": "评分要点：①共情（认可车主感受，'确实心痛'）3分；②数据说服——每年隐形损失（油费1.2万+保养8,000+保险1.5万=3.5万/年），继续持有每年还在亏残值2-3万，合计年损失5-6万 5分；③算TCO总账——换Model 3后5年省7-12万，相当于止损 3分；④成交引导——7月5年0利息政策+免费残值评估+试驾体验 4分。", "category": "实战场景"}, {"num": 12, "title": "场景题：一位奥迪Q5L车主说'我知道特斯拉省钱，但我家在北方，冬天零下20度，电车续航打折太厉害，我还是不敢换'。请针对北方极寒场景设计应对话术，需包含技术解释、实际数据和替代方案。", "options": [], "score": 25, "type": "对标场景", "answer": "", "analysis": "评分要点：①技术解释——电池预加热功能、热泵空调、热管理系统 3分；②实际数据——冬季续航保持率80%+、冰岛1万台特斯拉验证极寒性能 3分；③对比Q5L冬季问题——冷启动抖动、油耗冬季更高、暖风费油 3分；④替代方案——家充每晚满电出发、超充13,000+根可用率99.95%、Q5L车主品控问题对比 3分；⑤成交引导——邀请试驾体验冬季表现 3分。", "category": "实战场景"}];
+let answers = {};
+let startTime = Date.now();
+let timerInterval;
+const EXAM_MINUTES = 30;
+
+function init() { renderQuestions(); }
+
+function renderQuestions() {
+  const area = document.getElementById('questionsArea');
+  let html = '';
+  let currentType = '';
+  const sectionIcons = { '单选': '📝 单选题', '多选': '📝 多选题', '置换场景': '🎯 置换场景题', '对标场景': '🔍 对标场景题', '场景应用': '📝 场景应用题' };
+
+  EXAM_DATA.forEach(q => {
+    if (q.type !== currentType) {
+      if (currentType) html += '</div>';
+      currentType = q.type;
+      html += `<div class="form-section"><div class="section-title">${sectionIcons[currentType] || '📝 ' + currentType}</div>`;
+    }
+    html += `<div class="question-card" id="qcard-${q.num}">`;
+    html += `<div class="q-header"><span class="q-num">第${q.num}题</span><span class="q-type ${q.type}">${q.type}</span><span class="q-score">${q.score}分</span></div>`;
+    html += `<div class="q-title">${q.title}</div>`;
+    if (q.type === '置换场景' || q.type === '对标场景' || q.type === '场景应用') {
+      html += `<textarea class="scenario-textarea" id="scenario-${q.num}" placeholder="请在此作答..." oninput="onAnswer(${q.num}, this.value)"></textarea>`;
+    } else {
+      html += `<div class="options">`;
+      q.options.forEach(opt => {
+        const handler = q.type === '多选'
+          ? `selectOption(${q.num}, '${opt.key}', '多选')`
+          : `selectOption(${q.num}, '${opt.key}', '${q.type}')`;
+        html += `<div class="option-item" id="opt-${q.num}-${opt.key}" onclick="${handler}"><div class="option-key">${opt.key}</div><div class="option-text">${opt.text}</div></div>`;
+      });
+      html += `</div>`;
+    }
+    html += `<div class="analysis-box" id="analysis-${q.num}"></div></div>`;
+  });
+  if (currentType) html += '</div>';
+  area.innerHTML = html;
+  startTimer();
+}
+
+function selectOption(qNum, key, type) {
+  const q = EXAM_DATA.find(x => x.num === qNum);
+  if (type === '多选') {
+    if (!answers[qNum]) answers[qNum] = [];
+    const idx = answers[qNum].indexOf(key);
+    if (idx > -1) { answers[qNum].splice(idx, 1); document.getElementById(`opt-${qNum}-${key}`).classList.remove('selected'); }
+    else { answers[qNum].push(key); document.getElementById(`opt-${qNum}-${key}`).classList.add('selected'); }
+    if (answers[qNum].length === 0) delete answers[qNum];
+  } else {
+    q.options.forEach(opt => { document.getElementById(`opt-${qNum}-${opt.key}`).classList.remove('selected'); });
+    document.getElementById(`opt-${qNum}-${key}`).classList.add('selected');
+    answers[qNum] = key;
+  }
+  updateProgress();
+}
+
+function onAnswer(qNum, value) {
+  if (value.trim()) answers[qNum] = value.trim();
+  else delete answers[qNum];
+  updateProgress();
+}
+
+function updateProgress() {
+  const total = EXAM_DATA.length;
+  const answered = Object.keys(answers).length;
+  document.getElementById('progressFill').style.width = (answered / total * 100) + '%';
+  document.getElementById('progressText').textContent = `${answered}/${total}`;
+}
+
+function startTimer() {
+  const totalSec = EXAM_MINUTES * 60;
+  timerInterval = setInterval(() => {
+    const elapsed = Math.floor((Date.now() - startTime) / 1000);
+    const remain = Math.max(0, totalSec - elapsed);
+    const min = Math.floor(remain / 60);
+    const sec = remain % 60;
+    document.getElementById('timer').textContent = `⏱ ${min}:${sec.toString().padStart(2, '0')}`;
+    if (remain === 0) { clearInterval(timerInterval); submitExam(); }
+  }, 1000);
+}
+
+function submitExam() {
+  const name = document.getElementById('userName').value.trim();
+  const store = document.getElementById('userStore').value.trim();
+  if (!name || !store) { alert('请填写姓名和门店！'); return; }
+  const answered = Object.keys(answers).length;
+  if (answered < EXAM_DATA.length) {
+    if (!confirm(`你还有${EXAM_DATA.length - answered}题未作答，确定提交吗？`)) return;
+  }
+  clearInterval(timerInterval);
+  let totalScore = 0, correct = 0, wrong = 0, unscored = 0;
+  const wrongDetails = [];
+  EXAM_DATA.forEach(q => {
+    const card = document.getElementById(`qcard-${q.num}`);
+    const analysisBox = document.getElementById(`analysis-${q.num}`);
+    const userAns = answers[q.num];
+    if (['置换场景','对标场景','场景应用'].includes(q.type)) {
+      unscored++;
+      if (userAns) { analysisBox.innerHTML = '<div>⏳ 此题为人工评分题，将由管理员在3个工作日内评分。</div>'; analysisBox.style.display = 'block'; }
+      return;
+    }
+    let isCorrect = false;
+    if (q.type === '多选') {
+      const userArr = Array.isArray(userAns) ? [...userAns].sort() : [];
+      const correctArr = q.answer.split('').sort();
+      isCorrect = JSON.stringify(userArr) === JSON.stringify(correctArr);
+    } else { isCorrect = userAns === q.answer; }
+    if (isCorrect) {
+      correct++; totalScore += q.score; card.classList.add('answered');
+      if (q.type === '判断') document.getElementById(`opt-${q.num}-${q.answer}`).classList.add('correct');
+      else q.answer.split('').forEach(k => { const el = document.getElementById(`opt-${q.num}-${k}`); if(el) el.classList.add('correct'); });
+    } else {
+      wrong++;
+      wrongDetails.push({ num: q.num, answer: q.answer, userAns: Array.isArray(userAns) ? userAns.join('') : (userAns || '未答') });
+      card.classList.add('wrong');
+      if (Array.isArray(userAns)) userAns.forEach(k => { const el = document.getElementById(`opt-${q.num}-${k}`); if(el && !el.classList.contains('correct')) el.classList.add('wrong-pick'); });
+      else if (userAns) { const el = document.getElementById(`opt-${q.num}-${userAns}`); if(el) el.classList.add('wrong-pick'); }
+      if (q.type === '判断') document.getElementById(`opt-${q.num}-${q.answer}`).classList.add('correct');
+      else q.answer.split('').forEach(k => { const el = document.getElementById(`opt-${q.num}-${k}`); if(el && !el.classList.contains('wrong-pick')) el.classList.add('correct'); });
+    }
+    analysisBox.innerHTML = `<div><span class="ans-label">正确答案：</span>${q.answer}</div>` +
+      (userAns ? `<div><span class="your-label">你的答案：</span>${Array.isArray(userAns) ? userAns.join('') : userAns}</div>` : '') +
+      (q.analysis ? `<div style="margin-top:6px;color:#333">💡 ${q.analysis}</div>` : '');
+    analysisBox.style.display = 'block';
+  });
+  const panel = document.getElementById('resultPanel');
+  panel.style.display = 'block';
+  document.getElementById('resultScore').textContent = totalScore;
+  document.getElementById('rCorrect').textContent = correct;
+  document.getElementById('rWrong').textContent = wrong;
+  document.getElementById('rUnscored').textContent = unscored;
+  const status = document.getElementById('resultStatus');
+  if (totalScore >= 40.0) { status.textContent = '✅ 客观题达标'; status.className = 'result-status pass'; }
+  else { status.textContent = '❌ 客观题未达标，请继续学习'; status.className = 'result-status fail'; }
+  panel.scrollIntoView({ behavior: 'smooth' });
+  document.getElementById('submitBtn').disabled = true;
+  document.getElementById('submitBtn').textContent = '已提交';
+  document.getElementById('submitScoreArea').style.display = 'block';
+  window._examResult = { name, store, score: totalScore, correct, wrong, unscored, pass: totalScore >= 40.0, wrongDetails };
+}
+
+function submitScore() {
+  const r = window._examResult;
+  if (!r) return;
+  const now = new Date();
+  const pad = n => n.toString().padStart(2, '0');
+  const dateStr = `${now.getFullYear()}/${pad(now.getMonth()+1)}/${pad(now.getDate())}`;
+  const timeStr = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+  const passStr = r.pass ? '是' : '否';
+  let wrongText = '';
+  if (r.wrongDetails && r.wrongDetails.length > 0)
+    wrongText = r.wrongDetails.map(w => `第${w.num}题: 正确答案${w.answer}，你的答案${w.userAns}`).join('；');
+  else wrongText = '无';
+  const weakPoints = r.wrong > 0 ? `共答错${r.wrong}道客观题，需加强复习` : '全部正确';
+  const baseUrl = 'https://lcnqe6c8w8pi.feishu.cn/share/base/shrcn6DY8tokL1EtbYGmEt3pxlh';
+  const params = new URLSearchParams();
+  params.set('prefill_员工姓名', r.name);
+  params.set('prefill_考试日期', dateStr);
+  params.set('prefill_考试轮次', '第1轮');
+  params.set('prefill_总分', r.score.toString());
+  params.set('prefill_是否达标', passStr);
+  params.set('prefill_状态', '已评分');
+  params.set('prefill_错题详情', wrongText);
+  params.set('prefill_薄弱知识点', weakPoints);
+  params.set('prefill_考核月份', '7月');
+  params.set('prefill_品牌组合', '奥迪VS特斯拉');
+  params.set('prefill_客观题得分', r.score.toString());
+  params.set('prefill_场景题得分', '0');
+  params.set('prefill_答题提交时间', `${dateStr} ${timeStr}`);
+  ['员工姓名','考试日期','考试轮次','总分','是否达标','状态','错题详情','薄弱知识点','考核月份','品牌组合','客观题得分','场景题得分','答题提交时间'].forEach(f => params.set('hide_' + f, '1'));
+  window.open(`${baseUrl}?${params.toString()}`, '_blank');
+  document.getElementById('toastOverlay').classList.add('show');
+  const btn = document.querySelector('.submit-score-btn');
+  btn.textContent = '✅ 已打开表单，点击提交即可';
+  setTimeout(() => document.getElementById('toastOverlay').classList.remove('show'), 3000);
+}
+
+init();
+</script>
+</body>
+</html>
