@@ -1,6 +1,25 @@
 {
   "ok": true,
-  "source": "static-hosting",
-  "note": "GitHub Pages 静态托管模式 - 答题数据由本地评分页面管理",
-  "submissions": []
+  "source": "feishu-bitable-sync",
+  "last_sync": "2026-07-19T19:08:00+08:00",
+  "submissions": [
+    {
+      "employee_name": "赵晓征",
+      "score": 50,
+      "brand": "大众VS特斯拉",
+      "date": "2026-07-19",
+      "status": "已评分",
+      "passed": true,
+      "round": "第1轮"
+    },
+    {
+      "employee_name": "杨书南",
+      "score": 50,
+      "brand": "大众VS特斯拉",
+      "date": "2026-07-19",
+      "status": "已评分",
+      "passed": true,
+      "round": "第1轮"
+    }
+  ]
 }
