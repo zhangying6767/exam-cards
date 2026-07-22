@@ -1,9 +1,9 @@
 {
-  "updated_at": "2026-07-20T13:00:00+08:00",
+  "updated_at": "2026-07-22T18:35:26.627981",
   "current_week": {
     "brand": "大众",
     "brand_label": "大众VS特斯拉",
-    "exam_date": "2026-07-23",
+    "exam_date": "2026-07-22",
     "material_status": "已就绪",
     "ppt_ready": true,
     "analysis_ready": true,
@@ -15,34 +15,213 @@
     "pass_rate": 0
   },
   "brand_rotation": [
-    {"week": 1, "date": "2026-07-23", "brand": "大众", "status": "即将开始"},
-    {"week": 2, "date": "2026-07-30", "brand": "丰田", "status": "待开始"},
-    {"week": 3, "date": "2026-08-06", "brand": "奥迪", "status": "待开始"},
-    {"week": 4, "date": "2026-08-13", "brand": "现代", "status": "待开始"},
-    {"week": 5, "date": "2026-08-20", "brand": "别克", "status": "待开始"},
-    {"week": 6, "date": "2026-08-27", "brand": "理想", "status": "待开始"},
-    {"week": 7, "date": "2026-09-03", "brand": "奔驰", "status": "待开始"},
-    {"week": 8, "date": "2026-09-10", "brand": "宝马", "status": "待开始"}
+    {
+      "week": 1,
+      "date": "2026-07-23",
+      "brand": "大众",
+      "status": "即将开始"
+    },
+    {
+      "week": 2,
+      "date": "2026-07-30",
+      "brand": "丰田",
+      "status": "待开始"
+    },
+    {
+      "week": 3,
+      "date": "2026-08-06",
+      "brand": "奥迪",
+      "status": "待开始"
+    },
+    {
+      "week": 4,
+      "date": "2026-08-13",
+      "brand": "现代",
+      "status": "待开始"
+    },
+    {
+      "week": 5,
+      "date": "2026-08-20",
+      "brand": "别克",
+      "status": "待开始"
+    },
+    {
+      "week": 6,
+      "date": "2026-08-27",
+      "brand": "理想",
+      "status": "待开始"
+    },
+    {
+      "week": 7,
+      "date": "2026-09-03",
+      "brand": "奔驰",
+      "status": "待开始"
+    },
+    {
+      "week": 8,
+      "date": "2026-09-10",
+      "brand": "宝马",
+      "status": "待开始"
+    }
   ],
-  "history": [],
+  "history": [
+    {
+      "brand": "理想",
+      "date": "2026-07-03",
+      "pass_rate": 0,
+      "pass_count": 0,
+      "total": 0,
+      "avg_score": 0
+    },
+    {
+      "brand": "奥迪",
+      "date": "2026-07-03",
+      "pass_rate": 0,
+      "pass_count": 0,
+      "total": 0,
+      "avg_score": 0
+    },
+    {
+      "brand": "奥迪",
+      "date": "2026-07-06",
+      "pass_rate": 0,
+      "pass_count": 0,
+      "total": 0,
+      "avg_score": 0
+    },
+    {
+      "brand": "奥迪",
+      "date": "2026-07-10",
+      "pass_rate": 0,
+      "pass_count": 0,
+      "total": 0,
+      "avg_score": 0
+    },
+    {
+      "brand": "大众",
+      "date": "2026-07-13",
+      "pass_rate": 0,
+      "pass_count": 0,
+      "total": 0,
+      "avg_score": 0
+    },
+    {
+      "brand": "奔驰",
+      "date": "2026-07-14",
+      "pass_rate": 0,
+      "pass_count": 0,
+      "total": 0,
+      "avg_score": 0
+    },
+    {
+      "brand": "宝马",
+      "date": "2026-07-17",
+      "pass_rate": 0,
+      "pass_count": 0,
+      "total": 0,
+      "avg_score": 0
+    },
+    {
+      "brand": "大众",
+      "date": "2026-07-19",
+      "pass_rate": 0,
+      "pass_count": 0,
+      "total": 0,
+      "avg_score": 0
+    }
+  ],
   "employee_scores": [
-    {"name": "张嘉妍", "scores": [], "avg": 0, "trend": "—"},
-    {"name": "韩东", "scores": [], "avg": 0, "trend": "—"},
-    {"name": "何康", "scores": [], "avg": 0, "trend": "—"},
-    {"name": "姜广明", "scores": [], "avg": 0, "trend": "—"},
-    {"name": "陆勇达", "scores": [], "avg": 0, "trend": "—"},
-    {"name": "苗龙飞", "scores": [], "avg": 0, "trend": "—"},
-    {"name": "王成文", "scores": [], "avg": 0, "trend": "—"},
-    {"name": "王俊杰", "scores": [], "avg": 0, "trend": "—"},
-    {"name": "杨书南", "scores": [], "avg": 0, "trend": "—"},
-    {"name": "姚鹏", "scores": [], "avg": 0, "trend": "—"},
-    {"name": "张百川", "scores": [], "avg": 0, "trend": "—"},
-    {"name": "张伟", "scores": [], "avg": 0, "trend": "—"},
-    {"name": "赵晓征", "scores": [], "avg": 0, "trend": "—"}
+    {
+      "name": "张嘉妍",
+      "scores": [],
+      "avg": 0,
+      "trend": "—"
+    },
+    {
+      "name": "韩东",
+      "scores": [],
+      "avg": 0,
+      "trend": "—"
+    },
+    {
+      "name": "何康",
+      "scores": [],
+      "avg": 0,
+      "trend": "—"
+    },
+    {
+      "name": "姜广明",
+      "scores": [],
+      "avg": 0,
+      "trend": "—"
+    },
+    {
+      "name": "陆勇达",
+      "scores": [],
+      "avg": 0,
+      "trend": "—"
+    },
+    {
+      "name": "苗龙飞",
+      "scores": [],
+      "avg": 0,
+      "trend": "—"
+    },
+    {
+      "name": "王成文",
+      "scores": [],
+      "avg": 0,
+      "trend": "—"
+    },
+    {
+      "name": "王俊杰",
+      "scores": [],
+      "avg": 0,
+      "trend": "—"
+    },
+    {
+      "name": "杨书南",
+      "scores": [],
+      "avg": 0,
+      "trend": "—"
+    },
+    {
+      "name": "姚鹏",
+      "scores": [],
+      "avg": 0,
+      "trend": "—"
+    },
+    {
+      "name": "张百川",
+      "scores": [],
+      "avg": 0,
+      "trend": "—"
+    },
+    {
+      "name": "张伟",
+      "scores": [],
+      "avg": 0,
+      "trend": "—"
+    },
+    {
+      "name": "赵晓征",
+      "scores": [],
+      "avg": 0,
+      "trend": "—"
+    }
   ],
   "schedule": {
     "push_time": "09:00",
-    "reminder_hours": [10,11,12,13,14,15,16,17],
+    "reminder_hours": [
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17
+    ],
     "deadline_time": "18:00",
     "scoring_time": "18:30"
   }
